@@ -1,17 +1,14 @@
-function render(
-  templateString: string,
-  variables: Record<string, string>,
-): string {
+function render(template: string, variables: Record<string, string>): string {
   const key = Object.keys(variables).pop();
   const value = Object.values(variables).pop();
   if (!key || !value) {
-    return templateString;
+    return template;
   }
   const placeholder = `\${${key}}`;
-  const transformedString = templateString.replaceAll(placeholder, value);
+  const parsedTemplate = template.replaceAll(placeholder, value);
 
   delete variables[key];
-  return render(transformedString, variables);
+  return render(parsedTemplate, variables);
 }
 
 export { render };
