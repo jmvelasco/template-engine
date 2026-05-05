@@ -6,110 +6,77 @@ describe("The render function", () => {
     .spyOn(process.stdout, "write")
     .mockImplementation(() => true);
 
-  test("should return the template unchanged if there are no placeholders", () => {
-    const parsedText = render("Hello, world!", {});
-    const expected = "Hello, world!";
-
-    expect(parsedText).toBe(expected);
-  });
-
-  test("should return the same template if no variables are provided", () => {
-    const parsedText = render("Hello, ${name}!", {});
-    const expected = "Hello, ${name}!";
-
-    expect(parsedText).toBe(expected);
-  });
-
-  test("should return the template as is when variables are provided but no placeholders match", () => {
-    const parsedText = render("Hello, ${name}!", { age: "21" });
-    const expected = "Hello, ${name}!";
-
-    expect(parsedText).toBe(expected);
-  });
-
-  test("should replace the placeholder following the pattern ${variable_name}", () => {
-    const parsedText = render("Hello, ${name}!", {
-      name: "John",
-    });
-    const expected = "Hello, John!";
-
-    expect(parsedText).toBe(expected);
-  });
-
-  test("should replace all occurrences of the placeholder following the pattern ${variable_name}", () => {
-    const parsedText = render("Hello, ${name}! Welcome, ${name}!", {
-      name: "John",
-    });
-    const expected = "Hello, John! Welcome, John!";
-
-    expect(parsedText).toBe(expected);
-  });
-
-  test("should replace occurrences with multiple placeholders following the pattern ${variable_name}", () => {
-    const parsedText = render("Here it is ${name}!, he is ${age} years old.", {
-      name: "John",
-      age: "21",
-    });
-    const expected = "Here it is John!, he is 21 years old.";
-
-    expect(parsedText).toBe(expected);
-  });
-
-  test("should replace all occurrences with multiple placeholders following the pattern ${variable_name}", () => {
-    const parsedText = render(
-      "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
-      {
-        name: "John",
-        age: "21",
-        sisterAge: "25",
+  describe("returns template unchanged when there are no replacements", () => {
+    test.each([
+      ["no placeholders", "Hello, world!", {}, "Hello, world!"],
+      ["no variables provided", "Hello, ${name}!", {}, "Hello, ${name}!"],
+      [
+        "variables provided but no placeholders match",
+        "Hello, ${name}!",
+        { age: "21" },
+        "Hello, ${name}!",
+      ],
+      ["template is empty", "", {}, ""],
+      ["template is empty with variables", "", { name: "John" }, ""],
+    ])(
+      "should return the same template if %s",
+      (_, template, variables, expected) => {
+        const parsedText = render(template, variables);
+        expect(parsedText).toBe(expected);
       },
     );
-    const expected =
-      "Here it is John!, he is 21 years old and the sister of John is 25.";
-
-    expect(parsedText).toBe(expected);
   });
 
-  test("should return empty when the template and dictionary are empty", () => {
-    const parsedText = render("", {});
-    const expected = "";
-
-    expect(parsedText).toBe(expected);
+  describe("replaces placeholders successfully", () => {
+    test.each([
+      [
+        "single placeholder",
+        "Hello, ${name}!",
+        { name: "John" },
+        "Hello, John!",
+      ],
+      [
+        "all occurrences of the same placeholder",
+        "Hello, ${name}! Welcome, ${name}!",
+        { name: "John" },
+        "Hello, John! Welcome, John!",
+      ],
+      [
+        "multiple different placeholders",
+        "Here it is ${name}!, he is ${age} years old.",
+        { name: "John", age: "21" },
+        "Here it is John!, he is 21 years old.",
+      ],
+      [
+        "complex template with multiple placeholders",
+        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
+        { name: "John", age: "21", sisterAge: "25" },
+        "Here it is John!, he is 21 years old and the sister of John is 25.",
+      ],
+    ])("should replace %s", (_, template, variables, expected) => {
+      const parsedText = render(template, variables);
+      expect(parsedText).toBe(expected);
+    });
   });
 
-  test("should return empty when the template is an empty string", () => {
-    const parsedText = render("", { name: "John" });
-    const expected = "";
-
-    expect(parsedText).toBe(expected);
-  });
-
-  test("should replace occurrences for matching placeholders following the pattern ${variable_name}, let as it is for no matching placeholder", () => {
-    const parsedText = render(
-      "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
-      {
-        name: "John",
-        sisterAge: "25",
-      },
-    );
-    const expected =
-      "Here it is John!, he is ${age} years old and the sister of John is 25.";
-
-    expect(parsedText).toBe(expected);
-  });
-
-  test("should replace occurrences for matching placeholders following the pattern ${variable_name}, let as it is for no null placeholder value in the dictionary", () => {
-    const parsedText = render(
-      "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
-      {
-        name: null,
-        sisterAge: "25",
-      },
-    );
-    const expected =
-      "Here it is ${name}!, he is ${age} years old and the sister of ${name} is 25.";
-
-    expect(parsedText).toBe(expected);
+  describe("handles partial replacements correctly", () => {
+    test.each([
+      [
+        "matching placeholders replaced, no matching placeholder left as is",
+        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
+        { name: "John", sisterAge: "25" },
+        "Here it is John!, he is ${age} years old and the sister of John is 25.",
+      ],
+      [
+        "null placeholder value prevents replacement",
+        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
+        { name: null, sisterAge: "25" },
+        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is 25.",
+      ],
+    ])("should %s", (_, template, variables, expected) => {
+      const parsedText = render(template, variables);
+      expect(parsedText).toBe(expected);
+    });
   });
 
   test("should log a message when no replacements are done", () => {
