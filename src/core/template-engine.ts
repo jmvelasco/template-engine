@@ -11,10 +11,6 @@ function render(
   const keys = Object.keys(variables);
   const errors: string[] = [];
 
-  if (keys.length === 0) {
-    return { value: template, errors, isValid: true };
-  }
-
   let result = template;
   for (const key of keys) {
     const value = variables[key];
@@ -28,6 +24,12 @@ function render(
       errors.push(`\${${key}} not found in the template.`);
     }
     result = replaced;
+  }
+
+  const unreplacedPattern = /\$\{(\w+)\}/g;
+  let match;
+  while ((match = unreplacedPattern.exec(result)) !== null) {
+    errors.push(`Unreplaced placeholder \${${match[1]}} in template.`);
   }
 
   return { value: result, errors, isValid: errors.length === 0 };
