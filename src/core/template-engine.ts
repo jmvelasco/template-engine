@@ -4,29 +4,42 @@ interface RenderResult {
   isValid: boolean;
 }
 
-function render(
+function interpolate(
   template: string,
   variables: Record<string, string>,
-): RenderResult {
-  const keys = Object.keys(variables);
-  const errors: string[] = [];
-
+): { result: string; unusedKeys: string[] } {
+  const unusedKeys: string[] = [];
   let result = template;
-  for (const key of keys) {
-    const value = variables[key];
+
+  for (const key of Object.keys(variables)) {
     const placeholder = `\${${key}}`;
-    const replaced = result.replaceAll(placeholder, value);
+    const replaced = result.replaceAll(placeholder, variables[key]);
     if (replaced === result) {
-      errors.push(`\${${key}} not found in the template.`);
+      unusedKeys.push(key);
     }
     result = replaced;
   }
 
-  const unreplacedPattern = /\$\{(\w+)\}/g;
-  let match;
-  while ((match = unreplacedPattern.exec(result)) !== null) {
-    errors.push(`Unreplaced placeholder \${${match[1]}} in template.`);
-  }
+  return { result, unusedKeys };
+}
+
+function findUnreplacedPlaceholders(text: string): string[] {
+  const placeholderPattern = /\$\{(\w+)\}/g;
+  return [...text.matchAll(placeholderPattern)].map(
+    (match) => `Unreplaced placeholder \${${match[1]}} in template.`,
+  );
+}
+
+function render(
+  template: string,
+  variables: Record<string, string>,
+): RenderResult {
+  const { result, unusedKeys } = interpolate(template, variables);
+
+  const errors = [
+    ...unusedKeys.map((key) => `\${${key}} not found in the template.`),
+    ...findUnreplacedPlaceholders(result),
+  ];
 
   return { value: result, errors, isValid: errors.length === 0 };
 }
