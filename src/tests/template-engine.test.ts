@@ -200,4 +200,26 @@ describe("The template engine", () => {
       expect(result.errors).toEqual([]);
     });
   });
+
+  describe("reports undefined variable values", () => {
+    test("leaves placeholder intact and reports error when value is undefined", () => {
+      const result = render("Hello, ${name}!", { name: undefined });
+
+      expect(result.value).toBe("Hello, ${name}!");
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain("${name} is undefined.");
+    });
+
+    test("interpolates defined values and reports only the undefined ones", () => {
+      const result = render("${greeting}, ${name}!", {
+        greeting: "Hi",
+        name: undefined,
+      });
+
+      expect(result.value).toBe("Hi, ${name}!");
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain("${name} is undefined.");
+      expect(result.errors).not.toContain("${greeting} is undefined.");
+    });
+  });
 });
