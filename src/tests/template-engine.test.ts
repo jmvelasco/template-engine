@@ -1,22 +1,28 @@
 import { test, expect, describe } from "@jest/globals";
 import { render } from "../core/template-engine";
 
-describe("The render function", () => {
-  describe("returns template unchanged when there are no replacements", () => {
+describe("The template engine", () => {
+  describe("preserves template when no interpolation applies", () => {
     test.each([
-      ["no placeholders", "Hello, world!", {}, "Hello, world!", true],
-      ["no variables provided", "Hello, ${name}!", {}, "Hello, ${name}!", false],
+      ["without placeholders", "Hello, world!", {}, "Hello, world!", true],
       [
-        "variables provided but no placeholders match",
+        "with placeholders but no variables",
+        "Hello, ${name}!",
+        {},
+        "Hello, ${name}!",
+        false,
+      ],
+      [
+        "with variables that do not match any placeholder",
         "Hello, ${name}!",
         { age: "21" },
         "Hello, ${name}!",
         false,
       ],
-      ["template is empty", "", {}, "", true],
-      ["template is empty with variables", "", { name: "John" }, "", false],
+      ["with empty template", "", {}, "", true],
+      ["with empty template and unused variables", "", { name: "John" }, "", false],
     ])(
-      "should return the same template if %s",
+      "remains unchanged %s",
       (_, template, variables, expected, expectedIsValid) => {
         const result = render(template, variables);
         expect(result.value).toBe(expected);
@@ -25,33 +31,33 @@ describe("The render function", () => {
     );
   });
 
-  describe("replaces placeholders successfully", () => {
+  describe("interpolates variables into placeholders", () => {
     test.each([
       [
-        "single placeholder",
+        "a single variable",
         "Hello, ${name}!",
         { name: "John" },
         "Hello, John!",
       ],
       [
-        "all occurrences of the same placeholder",
+        "all occurrences of a repeated placeholder",
         "Hello, ${name}! Welcome, ${name}!",
         { name: "John" },
         "Hello, John! Welcome, John!",
       ],
       [
-        "multiple different placeholders",
+        "multiple distinct variables",
         "Here it is ${name}!, he is ${age} years old.",
         { name: "John", age: "21" },
         "Here it is John!, he is 21 years old.",
       ],
       [
-        "complex template with multiple placeholders",
+        "a complex template with repeated and distinct variables",
         "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
         { name: "John", age: "21", sisterAge: "25" },
         "Here it is John!, he is 21 years old and the sister of John is 25.",
       ],
-    ])("should replace %s", (_, template, variables, expected) => {
+    ])("resolves %s", (_, template, variables, expected) => {
       const result = render(template, variables);
       expect(result.value).toBe(expected);
       expect(result.isValid).toBe(true);
@@ -59,21 +65,21 @@ describe("The render function", () => {
     });
   });
 
-  describe("handles partial replacements correctly", () => {
+  describe("partially interpolates when variables are incomplete", () => {
     test.each([
       [
-        "matching placeholders replaced, no matching placeholder left as is",
+        "available variables are interpolated, missing ones stay as placeholders",
         "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
         { name: "John", sisterAge: "25" },
         "Here it is John!, he is ${age} years old and the sister of John is 25.",
       ],
       [
-        "null placeholder value prevents replacement",
+        "null value prevents interpolation for that variable",
         "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
         { name: null, sisterAge: "25" },
         "Here it is ${name}!, he is ${age} years old and the sister of ${name} is 25.",
       ],
-    ])("should %s", (_, template, variables, expected) => {
+    ])("accepts %s", (_, template, variables, expected) => {
       const result = render(template, variables);
       expect(result.value).toBe(expected);
       expect(result.isValid).toBe(false);
@@ -81,7 +87,7 @@ describe("The render function", () => {
   });
 
   describe("reports errors for invalid or missing variables", () => {
-    test("accumulates errors for missing and null variables", () => {
+    test("accumulates all errors from null values, unused keys, and unreplaced placeholders", () => {
       const result = render(
         "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
         {
@@ -106,7 +112,7 @@ describe("The render function", () => {
       ]);
     });
 
-    test("reports unreplaced placeholders left in the result", () => {
+    test("identifies unreplaced placeholders when variables are incomplete", () => {
       const result = render("Welcome ${name}, your role is ${role}.", {
         name: "Ana",
       });
@@ -118,7 +124,7 @@ describe("The render function", () => {
       );
     });
 
-    test("reports valid when all placeholders are replaced", () => {
+    test("considers the result valid when every placeholder is resolved", () => {
       const result = render("Hello, ${name}!", { name: "John" });
 
       expect(result.isValid).toBe(true);
@@ -127,14 +133,14 @@ describe("The render function", () => {
   });
 
   describe("preserves input integrity", () => {
-    test("does not mutate the original variables object", () => {
+    test("leaves the original variables object unchanged", () => {
       const variables = { name: "John", age: "21" };
       render("Hello, ${name}! Age: ${age}", variables);
 
       expect(variables).toEqual({ name: "John", age: "21" });
     });
 
-    test("replaces placeholder with empty string when value is empty", () => {
+    test("accepts empty string as a valid variable value", () => {
       const result = render("Hello, ${name}!", { name: "" });
 
       expect(result.value).toBe("Hello, !");
