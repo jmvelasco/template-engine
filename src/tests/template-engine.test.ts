@@ -80,62 +80,66 @@ describe("The render function", () => {
     });
   });
 
-  test("accumulates errors for missing and null variables", () => {
-    const result = render(
-      "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
-      {
-        foo: null,
-        bar: "25",
-        baz: "30",
-      },
-    );
+  describe("reports errors for invalid or missing variables", () => {
+    test("accumulates errors for missing and null variables", () => {
+      const result = render(
+        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
+        {
+          foo: null,
+          bar: "25",
+          baz: "30",
+        },
+      );
 
-    expect(result.value).toBe(
-      "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
-    );
-    expect(result.isValid).toBe(false);
-    expect(result.errors).toEqual([
-      "${foo} has no value.",
-      "${bar} not found in the template.",
-      "${baz} not found in the template.",
-      "Unreplaced placeholder ${name} in template.",
-      "Unreplaced placeholder ${age} in template.",
-      "Unreplaced placeholder ${name} in template.",
-      "Unreplaced placeholder ${sisterAge} in template.",
-    ]);
-  });
-
-  test("reports unreplaced placeholders left in the result", () => {
-    const result = render("Welcome ${name}, your role is ${role}.", {
-      name: "Ana",
+      expect(result.value).toBe(
+        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
+      );
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toEqual([
+        "${foo} has no value.",
+        "${bar} not found in the template.",
+        "${baz} not found in the template.",
+        "Unreplaced placeholder ${name} in template.",
+        "Unreplaced placeholder ${age} in template.",
+        "Unreplaced placeholder ${name} in template.",
+        "Unreplaced placeholder ${sisterAge} in template.",
+      ]);
     });
 
-    expect(result.value).toBe("Welcome Ana, your role is ${role}.");
-    expect(result.isValid).toBe(false);
-    expect(result.errors).toContain(
-      "Unreplaced placeholder ${role} in template.",
-    );
+    test("reports unreplaced placeholders left in the result", () => {
+      const result = render("Welcome ${name}, your role is ${role}.", {
+        name: "Ana",
+      });
+
+      expect(result.value).toBe("Welcome Ana, your role is ${role}.");
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain(
+        "Unreplaced placeholder ${role} in template.",
+      );
+    });
+
+    test("reports valid when all placeholders are replaced", () => {
+      const result = render("Hello, ${name}!", { name: "John" });
+
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toEqual([]);
+    });
   });
 
-  test("does not mutate the original variables object", () => {
-    const variables = { name: "John", age: "21" };
-    render("Hello, ${name}! Age: ${age}", variables);
+  describe("preserves input integrity", () => {
+    test("does not mutate the original variables object", () => {
+      const variables = { name: "John", age: "21" };
+      render("Hello, ${name}! Age: ${age}", variables);
 
-    expect(variables).toEqual({ name: "John", age: "21" });
-  });
+      expect(variables).toEqual({ name: "John", age: "21" });
+    });
 
-  test("reports valid when all placeholders are replaced", () => {
-    const result = render("Hello, ${name}!", { name: "John" });
+    test("replaces placeholder with empty string when value is empty", () => {
+      const result = render("Hello, ${name}!", { name: "" });
 
-    expect(result.isValid).toBe(true);
-    expect(result.errors).toEqual([]);
-  });
-
-  test("replaces placeholder with empty string when value is empty", () => {
-    const result = render("Hello, ${name}!", { name: "" });
-
-    expect(result.value).toBe("Hello, !");
-    expect(result.isValid).toBe(true);
-    expect(result.errors).toEqual([]);
+      expect(result.value).toBe("Hello, !");
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toEqual([]);
+    });
   });
 });
