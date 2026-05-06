@@ -2,10 +2,6 @@ import { test, expect, describe } from "@jest/globals";
 import { render } from "../core/template-engine";
 
 describe("The render function", () => {
-  const stdoutSpy = jest
-    .spyOn(process.stdout, "write")
-    .mockImplementation(() => true);
-
   describe("returns template unchanged when there are no replacements", () => {
     test.each([
       ["no placeholders", "Hello, world!", {}, "Hello, world!"],
@@ -21,8 +17,8 @@ describe("The render function", () => {
     ])(
       "should return the same template if %s",
       (_, template, variables, expected) => {
-        const parsedText = render(template, variables);
-        expect(parsedText).toBe(expected);
+        const result = render(template, variables);
+        expect(result.value).toBe(expected);
       },
     );
   });
@@ -54,8 +50,8 @@ describe("The render function", () => {
         "Here it is John!, he is 21 years old and the sister of John is 25.",
       ],
     ])("should replace %s", (_, template, variables, expected) => {
-      const parsedText = render(template, variables);
-      expect(parsedText).toBe(expected);
+      const result = render(template, variables);
+      expect(result.value).toBe(expected);
     });
   });
 
@@ -74,13 +70,13 @@ describe("The render function", () => {
         "Here it is ${name}!, he is ${age} years old and the sister of ${name} is 25.",
       ],
     ])("should %s", (_, template, variables, expected) => {
-      const parsedText = render(template, variables);
-      expect(parsedText).toBe(expected);
+      const result = render(template, variables);
+      expect(result.value).toBe(expected);
     });
   });
 
-  test("should log a message when no replacements are done", () => {
-    const parsedText = render(
+  test("accumulates errors for missing and null variables", () => {
+    const result = render(
       "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
       {
         foo: null,
@@ -88,19 +84,14 @@ describe("The render function", () => {
         baz: "30",
       },
     );
-    const expected =
-      "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.";
 
-    expect(stdoutSpy).toHaveBeenCalledWith(
-      "No replacements done! key ${foo} has no value.\n",
+    expect(result.value).toBe(
+      "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
     );
-    expect(stdoutSpy).toHaveBeenCalledWith(
-      "No replacements done! key ${bar} not found in the template.\n",
-    );
-    expect(stdoutSpy).toHaveBeenCalledWith(
-      "No replacements done! key ${baz} not found in the template.\n",
-    );
-    expect(parsedText).toBe(expected);
+    expect(result.isValid).toBe(false);
+    expect(result.errors).toContain("${foo} has no value.");
+    expect(result.errors).toContain("${bar} not found in the template.");
+    expect(result.errors).toContain("${baz} not found in the template.");
   });
 
   test("does not mutate the original variables object", () => {
@@ -108,5 +99,12 @@ describe("The render function", () => {
     render("Hello, ${name}! Age: ${age}", variables);
 
     expect(variables).toEqual({ name: "John", age: "21" });
+  });
+
+  test("reports valid when all placeholders are replaced", () => {
+    const result = render("Hello, ${name}!", { name: "John" });
+
+    expect(result.isValid).toBe(true);
+    expect(result.errors).toEqual([]);
   });
 });
