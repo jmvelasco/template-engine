@@ -14,7 +14,7 @@ function render(
   let result = template;
   for (const key of keys) {
     const value = variables[key];
-    if (!value) {
+    if (value === null) {
       errors.push(`\${${key}} has no value.`);
       continue;
     }
