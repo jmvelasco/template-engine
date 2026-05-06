@@ -6,7 +6,7 @@ interface RenderResult {
 
 function render(
   template: string,
-  variables: Record<string, string | null>,
+  variables: Record<string, string>,
 ): RenderResult {
   const keys = Object.keys(variables);
   const errors: string[] = [];
@@ -14,10 +14,6 @@ function render(
   let result = template;
   for (const key of keys) {
     const value = variables[key];
-    if (value === null) {
-      errors.push(`\${${key}} has no value.`);
-      continue;
-    }
     const placeholder = `\${${key}}`;
     const replaced = result.replaceAll(placeholder, value);
     if (replaced === result) {

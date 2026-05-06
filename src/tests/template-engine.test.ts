@@ -20,7 +20,13 @@ describe("The template engine", () => {
         false,
       ],
       ["with empty template", "", {}, "", true],
-      ["with empty template and unused variables", "", { name: "John" }, "", false],
+      [
+        "with empty template and unused variables",
+        "",
+        { name: "John" },
+        "",
+        false,
+      ],
     ])(
       "remains unchanged %s",
       (_, template, variables, expected, expectedIsValid) => {
@@ -73,12 +79,6 @@ describe("The template engine", () => {
         { name: "John", sisterAge: "25" },
         "Here it is John!, he is ${age} years old and the sister of John is 25.",
       ],
-      [
-        "null value prevents interpolation for that variable",
-        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
-        { name: null, sisterAge: "25" },
-        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is 25.",
-      ],
     ])("accepts %s", (_, template, variables, expected) => {
       const result = render(template, variables);
       expect(result.value).toBe(expected);
@@ -87,11 +87,10 @@ describe("The template engine", () => {
   });
 
   describe("reports errors for invalid or missing variables", () => {
-    test("accumulates all errors from null values, unused keys, and unreplaced placeholders", () => {
+    test("accumulates all errors from unused keys and unreplaced placeholders", () => {
       const result = render(
         "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
         {
-          foo: null,
           bar: "25",
           baz: "30",
         },
@@ -102,7 +101,6 @@ describe("The template engine", () => {
       );
       expect(result.isValid).toBe(false);
       expect(result.errors).toEqual([
-        "${foo} has no value.",
         "${bar} not found in the template.",
         "${baz} not found in the template.",
         "Unreplaced placeholder ${name} in template.",
