@@ -94,9 +94,15 @@ describe("The render function", () => {
       "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
     );
     expect(result.isValid).toBe(false);
-    expect(result.errors).toContain("${foo} has no value.");
-    expect(result.errors).toContain("${bar} not found in the template.");
-    expect(result.errors).toContain("${baz} not found in the template.");
+    expect(result.errors).toEqual([
+      "${foo} has no value.",
+      "${bar} not found in the template.",
+      "${baz} not found in the template.",
+      "Unreplaced placeholder ${name} in template.",
+      "Unreplaced placeholder ${age} in template.",
+      "Unreplaced placeholder ${name} in template.",
+      "Unreplaced placeholder ${sisterAge} in template.",
+    ]);
   });
 
   test("reports unreplaced placeholders left in the result", () => {
