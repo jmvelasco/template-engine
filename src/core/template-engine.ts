@@ -6,24 +6,24 @@ function render(
   template: string,
   variables: Record<string, string | null>,
 ): string {
-  const key = Object.keys(variables).pop();
-  const value = Object.values(variables).pop();
-  if (!key) {
+  const entries = Object.entries(variables);
+  const entry = entries.pop();
+  if (!entry) {
     logger(`No replacements done! key not found in the dictionary.`);
     return template;
   }
+  const [key, value] = entry;
   if (!value) {
     logger(`No replacements done! key \${${key}} has no value.`);
-    return template;
+    return render(template, Object.fromEntries(entries));
   }
   const placeholder = `\${${key}}`;
   const parsedTemplate = template.replaceAll(placeholder, value);
-  delete variables[key];
   if (parsedTemplate === template) {
     logger(`No replacements done! key \${${key}} not found in the template.`);
   }
 
-  return render(parsedTemplate, variables);
+  return render(parsedTemplate, Object.fromEntries(entries));
 }
 
 export { render, logger };
