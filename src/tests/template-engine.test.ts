@@ -94,6 +94,18 @@ describe("The render function", () => {
     expect(result.errors).toContain("${baz} not found in the template.");
   });
 
+  test("reports unreplaced placeholders left in the result", () => {
+    const result = render("Welcome ${name}, your role is ${role}.", {
+      name: "Ana",
+    });
+
+    expect(result.value).toBe("Welcome Ana, your role is ${role}.");
+    expect(result.isValid).toBe(false);
+    expect(result.errors).toContain(
+      "Unreplaced placeholder ${role} in template.",
+    );
+  });
+
   test("does not mutate the original variables object", () => {
     const variables = { name: "John", age: "21" };
     render("Hello, ${name}! Age: ${age}", variables);
