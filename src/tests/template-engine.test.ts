@@ -4,21 +4,23 @@ import { render } from "../core/template-engine";
 describe("The render function", () => {
   describe("returns template unchanged when there are no replacements", () => {
     test.each([
-      ["no placeholders", "Hello, world!", {}, "Hello, world!"],
-      ["no variables provided", "Hello, ${name}!", {}, "Hello, ${name}!"],
+      ["no placeholders", "Hello, world!", {}, "Hello, world!", true],
+      ["no variables provided", "Hello, ${name}!", {}, "Hello, ${name}!", false],
       [
         "variables provided but no placeholders match",
         "Hello, ${name}!",
         { age: "21" },
         "Hello, ${name}!",
+        false,
       ],
-      ["template is empty", "", {}, ""],
-      ["template is empty with variables", "", { name: "John" }, ""],
+      ["template is empty", "", {}, "", true],
+      ["template is empty with variables", "", { name: "John" }, "", false],
     ])(
       "should return the same template if %s",
-      (_, template, variables, expected) => {
+      (_, template, variables, expected, expectedIsValid) => {
         const result = render(template, variables);
         expect(result.value).toBe(expected);
+        expect(result.isValid).toBe(expectedIsValid);
       },
     );
   });
@@ -52,6 +54,8 @@ describe("The render function", () => {
     ])("should replace %s", (_, template, variables, expected) => {
       const result = render(template, variables);
       expect(result.value).toBe(expected);
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toEqual([]);
     });
   });
 
@@ -72,6 +76,7 @@ describe("The render function", () => {
     ])("should %s", (_, template, variables, expected) => {
       const result = render(template, variables);
       expect(result.value).toBe(expected);
+      expect(result.isValid).toBe(false);
     });
   });
 
