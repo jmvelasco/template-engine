@@ -166,4 +166,38 @@ describe("The template engine", () => {
       expect(result.errors).toEqual([]);
     });
   });
+
+  describe("handles edge cases in placeholder syntax", () => {
+    test("does not treat a value containing placeholder syntax as a new placeholder", () => {
+      const result = render("Hello, ${name}!", { name: "${greeting}" });
+
+      expect(result.value).toBe("Hello, ${greeting}!");
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toEqual([]);
+    });
+
+    test("ignores unclosed placeholder syntax", () => {
+      const result = render("Price is ${amount", {});
+
+      expect(result.value).toBe("Price is ${amount");
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toEqual([]);
+    });
+
+    test("ignores lone dollar sign", () => {
+      const result = render("Price is $100", {});
+
+      expect(result.value).toBe("Price is $100");
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toEqual([]);
+    });
+
+    test("ignores placeholder with non-word characters", () => {
+      const result = render("Hello, ${my-var}!", {});
+
+      expect(result.value).toBe("Hello, ${my-var}!");
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toEqual([]);
+    });
+  });
 });
