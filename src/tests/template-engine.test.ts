@@ -102,4 +102,11 @@ describe("The render function", () => {
     );
     expect(parsedText).toBe(expected);
   });
+
+  test("does not mutate the original variables object", () => {
+    const variables = { name: "John", age: "21" };
+    render("Hello, ${name}! Age: ${age}", variables);
+
+    expect(variables).toEqual({ name: "John", age: "21" });
+  });
 });
