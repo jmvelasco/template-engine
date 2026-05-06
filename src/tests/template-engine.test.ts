@@ -4,33 +4,46 @@ import { render } from "../core/template-engine";
 describe("The template engine", () => {
   describe("preserves template when no interpolation applies", () => {
     test.each([
-      ["without placeholders", "Hello, world!", {}, "Hello, world!", true],
-      [
-        "with placeholders but no variables",
-        "Hello, ${name}!",
-        {},
-        "Hello, ${name}!",
-        false,
-      ],
-      [
-        "with variables that do not match any placeholder",
-        "Hello, ${name}!",
-        { age: "21" },
-        "Hello, ${name}!",
-        false,
-      ],
-      ["with empty template", "", {}, "", true],
-      [
-        "with empty template and unused variables",
-        "",
-        { name: "John" },
-        "",
-        false,
-      ],
+      {
+        scenario: "without placeholders",
+        template: "Hello, world!",
+        variables: {},
+        expected: "Hello, world!",
+        expectedIsValid: true,
+      },
+      {
+        scenario: "with placeholders but no variables",
+        template: "Hello, ${name}!",
+        variables: {},
+        expected: "Hello, ${name}!",
+        expectedIsValid: false,
+      },
+      {
+        scenario: "with variables that do not match any placeholder",
+        template: "Hello, ${name}!",
+        variables: { age: "21" },
+        expected: "Hello, ${name}!",
+        expectedIsValid: false,
+      },
+      {
+        scenario: "with empty template",
+        template: "",
+        variables: {},
+        expected: "",
+        expectedIsValid: true,
+      },
+      {
+        scenario: "with empty template and unused variables",
+        template: "",
+        variables: { name: "John" },
+        expected: "",
+        expectedIsValid: false,
+      },
     ])(
-      "remains unchanged %s",
-      (_, template, variables, expected, expectedIsValid) => {
+      "remains unchanged $scenario",
+      ({ template, variables, expected, expectedIsValid }) => {
         const result = render(template, variables);
+
         expect(result.value).toBe(expected);
         expect(result.isValid).toBe(expectedIsValid);
       },
@@ -39,32 +52,35 @@ describe("The template engine", () => {
 
   describe("interpolates variables into placeholders", () => {
     test.each([
-      [
-        "a single variable",
-        "Hello, ${name}!",
-        { name: "John" },
-        "Hello, John!",
-      ],
-      [
-        "all occurrences of a repeated placeholder",
-        "Hello, ${name}! Welcome, ${name}!",
-        { name: "John" },
-        "Hello, John! Welcome, John!",
-      ],
-      [
-        "multiple distinct variables",
-        "Here it is ${name}!, he is ${age} years old.",
-        { name: "John", age: "21" },
-        "Here it is John!, he is 21 years old.",
-      ],
-      [
-        "a complex template with repeated and distinct variables",
-        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
-        { name: "John", age: "21", sisterAge: "25" },
-        "Here it is John!, he is 21 years old and the sister of John is 25.",
-      ],
-    ])("resolves %s", (_, template, variables, expected) => {
+      {
+        scenario: "a single variable",
+        template: "Hello, ${name}!",
+        variables: { name: "John" },
+        expected: "Hello, John!",
+      },
+      {
+        scenario: "all occurrences of a repeated placeholder",
+        template: "Hello, ${name}! Welcome, ${name}!",
+        variables: { name: "John" },
+        expected: "Hello, John! Welcome, John!",
+      },
+      {
+        scenario: "multiple distinct variables",
+        template: "Here it is ${name}!, he is ${age} years old.",
+        variables: { name: "John", age: "21" },
+        expected: "Here it is John!, he is 21 years old.",
+      },
+      {
+        scenario: "a complex template with repeated and distinct variables",
+        template:
+          "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
+        variables: { name: "John", age: "21", sisterAge: "25" },
+        expected:
+          "Here it is John!, he is 21 years old and the sister of John is 25.",
+      },
+    ])("resolves $scenario", ({ template, variables, expected }) => {
       const result = render(template, variables);
+
       expect(result.value).toBe(expected);
       expect(result.isValid).toBe(true);
       expect(result.errors).toEqual([]);
@@ -73,14 +89,18 @@ describe("The template engine", () => {
 
   describe("partially interpolates when variables are incomplete", () => {
     test.each([
-      [
-        "available variables are interpolated, missing ones stay as placeholders",
-        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
-        { name: "John", sisterAge: "25" },
-        "Here it is John!, he is ${age} years old and the sister of John is 25.",
-      ],
-    ])("accepts %s", (_, template, variables, expected) => {
+      {
+        scenario:
+          "available variables are interpolated, missing ones stay as placeholders",
+        template:
+          "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
+        variables: { name: "John", sisterAge: "25" },
+        expected:
+          "Here it is John!, he is ${age} years old and the sister of John is 25.",
+      },
+    ])("accepts $scenario", ({ template, variables, expected }) => {
       const result = render(template, variables);
+
       expect(result.value).toBe(expected);
       expect(result.isValid).toBe(false);
     });
