@@ -119,4 +119,12 @@ describe("The render function", () => {
     expect(result.isValid).toBe(true);
     expect(result.errors).toEqual([]);
   });
+
+  test("replaces placeholder with empty string when value is empty", () => {
+    const result = render("Hello, ${name}!", { name: "" });
+
+    expect(result.value).toBe("Hello, !");
+    expect(result.isValid).toBe(true);
+    expect(result.errors).toEqual([]);
+  });
 });
