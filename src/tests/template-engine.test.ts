@@ -2,7 +2,7 @@ import { test, expect, describe } from "@jest/globals";
 import { render } from "../core/template-engine";
 
 describe("The render function", () => {
-  const stdoutSpy = jest
+  const loggerSpy = jest
     .spyOn(process.stdout, "write")
     .mockImplementation(() => true);
 
@@ -91,13 +91,13 @@ describe("The render function", () => {
     const expected =
       "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.";
 
-    expect(stdoutSpy).toHaveBeenCalledWith(
+    expect(loggerSpy).toHaveBeenCalledWith(
       "No replacements done! key ${foo} has no value.\n",
     );
-    expect(stdoutSpy).toHaveBeenCalledWith(
+    expect(loggerSpy).toHaveBeenCalledWith(
       "No replacements done! key ${bar} not found in the template.\n",
     );
-    expect(stdoutSpy).toHaveBeenCalledWith(
+    expect(loggerSpy).toHaveBeenCalledWith(
       "No replacements done! key ${baz} not found in the template.\n",
     );
     expect(parsedText).toBe(expected);
