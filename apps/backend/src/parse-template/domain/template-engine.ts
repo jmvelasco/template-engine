@@ -1,31 +1,3 @@
-function logger(message: string): void {
-  process.stdout.write(message + "\n");
-}
-
-function render(
-  template: string,
-  variables: Record<string, string | null>,
-): string {
-  const key = Object.keys(variables).pop();
-  const value = Object.values(variables).pop();
-  if (!key) {
-    logger(`No replacements done! key not found in the dictionary.`);
-    return template;
-  }
-  if (!value) {
-    logger(`No replacements done! key \${${key}} has no value.`);
-    return template;
-  }
-  const placeholder = `\${${key}}`;
-  const parsedTemplate = template.replaceAll(placeholder, value);
-  delete variables[key];
-  if (parsedTemplate === template) {
-    logger(`No replacements done! key \${${key}} not found in the template.`);
-  }
-
-  return render(parsedTemplate, variables);
-}
-
 type ReplacedNotification = {
   type: "replaced";
   key: string;
@@ -69,17 +41,34 @@ class TemplateEngine {
       [...template.matchAll(placeholderPattern)].map((match) => match[1]),
     );
 
-    if (placeholdersInTemplate.size === 0) {
-      const unusedNotifications: ParseNotification[] = Object.keys(
-        variables,
-      ).map((key) => ({ type: "unused-variable" as const, key }));
-      return { text: template, notifications: unusedNotifications };
-    }
+    const placeholderNotifications = this.processPlaceholders(
+      template,
+      placeholdersInTemplate,
+      variables,
+    );
+    const unusedNotifications = this.detectUnusedVariables(
+      placeholdersInTemplate,
+      variables,
+    );
 
+    return {
+      text: placeholderNotifications.parsedText,
+      notifications: [
+        ...placeholderNotifications.notifications,
+        ...unusedNotifications,
+      ],
+    };
+  }
+
+  private processPlaceholders(
+    template: string,
+    placeholders: Set<string>,
+    variables: Record<string, string | null>,
+  ): { parsedText: string; notifications: ParseNotification[] } {
     let parsedText = template;
     const notifications: ParseNotification[] = [];
 
-    for (const key of placeholdersInTemplate) {
+    for (const key of placeholders) {
       const variableNotProvided = !(key in variables);
       if (variableNotProvided) {
         notifications.push({ type: "missing-variable", key });
@@ -96,16 +85,18 @@ class TemplateEngine {
       notifications.push({ type: "replaced", key, value, occurrences });
     }
 
-    const unusedVariables = Object.keys(variables).filter(
-      (key) => !placeholdersInTemplate.has(key),
-    );
-    for (const key of unusedVariables) {
-      notifications.push({ type: "unused-variable", key });
-    }
+    return { parsedText, notifications };
+  }
 
-    return { text: parsedText, notifications };
+  private detectUnusedVariables(
+    placeholders: Set<string>,
+    variables: Record<string, string | null>,
+  ): UnusedVariableNotification[] {
+    return Object.keys(variables)
+      .filter((key) => !placeholders.has(key))
+      .map((key) => ({ type: "unused-variable" as const, key }));
   }
 }
 
-export { render, logger, TemplateEngine };
+export { TemplateEngine };
 export type { ParseResult, ParseNotification };

@@ -17,7 +17,7 @@
 - [x] 2.6 **TDD cycle**: Missing variable — placeholder stays, `missing-variable` notification produced
 - [x] 2.7 **TDD cycle**: Null value — placeholder stays, `null-value` notification produced
 - [x] 2.8 **TDD cycle**: Unused variable — `unused-variable` notification produced
-- [ ] 2.9 **TDD cycle**: Mixed scenario — replaced + missing + null + unused in one parse call
+- [x] 2.9 **TDD cycle**: Mixed scenario — replaced + missing + null + unused in one parse call
 - [ ] 2.10 Run `npm run format:fix` on all backend code changes
 
 ## 3. Backend Application — ParseTemplateUseCase
