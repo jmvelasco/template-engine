@@ -44,4 +44,15 @@ describe("The TemplateEngine", () => {
       { type: "replaced", key: "name", value: "Ada", occurrences: 1 },
     ]);
   });
+
+  test("counts all occurrences when same placeholder appears multiple times", () => {
+    const engine = new TemplateEngine();
+
+    const result = engine.parse("${name} meets ${name}", { name: "Ada" });
+
+    expect(result.text).toBe("Ada meets Ada");
+    expect(result.notifications).toEqual([
+      { type: "replaced", key: "name", value: "Ada", occurrences: 2 },
+    ]);
+  });
 });
