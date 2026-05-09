@@ -33,7 +33,12 @@ type ReplacedNotification = {
   occurrences: number;
 };
 
-type ParseNotification = ReplacedNotification;
+type MissingVariableNotification = {
+  type: "missing-variable";
+  key: string;
+};
+
+type ParseNotification = ReplacedNotification | MissingVariableNotification;
 
 interface ParseResult {
   text: string;
@@ -58,8 +63,13 @@ class TemplateEngine {
     const notifications: ParseNotification[] = [];
 
     for (const key of placeholdersInTemplate) {
+      const variableNotProvided = !(key in variables);
+      if (variableNotProvided) {
+        notifications.push({ type: "missing-variable", key });
+        continue;
+      }
       const value = variables[key];
-      if (value === undefined || value === null) {
+      if (value === null) {
         continue;
       }
       const placeholder = `\${${key}}`;
