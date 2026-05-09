@@ -105,4 +105,24 @@ describe("The TemplateEngine", () => {
       { type: "unused-variable", key: "age" },
     ]);
   });
+
+  test("produces all notification types in a single parse call", () => {
+    const engine = new TemplateEngine();
+
+    const result = engine.parse("${greeting}, ${name}! Age: ${age}", {
+      greeting: "Hi",
+      name: null,
+      extra: "unused",
+    });
+
+    expect(result.text).toBe("Hi, ${name}! Age: ${age}");
+    expect(result.notifications).toEqual(
+      expect.arrayContaining([
+        { type: "replaced", key: "greeting", value: "Hi", occurrences: 1 },
+        { type: "null-value", key: "name" },
+        { type: "missing-variable", key: "age" },
+        { type: "unused-variable", key: "extra" },
+      ]),
+    );
+  });
 });
