@@ -83,4 +83,15 @@ describe("The TemplateEngine", () => {
       { type: "missing-variable", key: "name" },
     ]);
   });
+
+  test("keeps placeholder and notifies when variable value is null", () => {
+    const engine = new TemplateEngine();
+
+    const result = engine.parse("Hello, ${name}!", { name: null });
+
+    expect(result.text).toBe("Hello, ${name}!");
+    expect(result.notifications).toEqual([
+      { type: "null-value", key: "name" },
+    ]);
+  });
 });
