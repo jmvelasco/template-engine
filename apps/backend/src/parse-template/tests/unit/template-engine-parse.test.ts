@@ -33,4 +33,15 @@ describe("The TemplateEngine", () => {
     expect(result.text).toBe("Hello, world!");
     expect(result.notifications).toEqual([]);
   });
+
+  test("replaces single placeholder with corresponding variable value", () => {
+    const engine = new TemplateEngine();
+
+    const result = engine.parse("Hello, ${name}!", { name: "Ada" });
+
+    expect(result.text).toBe("Hello, Ada!");
+    expect(result.notifications).toEqual([
+      { type: "replaced", key: "name", value: "Ada", occurrences: 1 },
+    ]);
+  });
 });

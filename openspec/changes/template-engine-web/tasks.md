@@ -9,8 +9,8 @@
 > 🧪 _TDD: REASON → RED → GREEN → REFACTOR → RE-EVALUATE_
 > 📏 _coding-standards, testing-standards, backend-hexagonal skill (domain purity, rich domain model)_
 
-- [ ] 2.1 **REASON**: List and organize all domain test cases from the `template-parsing` spec. Write them as a TODO list in the test file. Validate with Tech Lead before starting
-- [ ] 2.2 **TDD cycle**: `ParseResult` value object — parse a template with no placeholders returns unchanged text and empty notifications
+- [x] 2.1 **REASON**: List and organize all domain test cases from the `template-parsing` spec. Write them as a TODO list in the test file. Validate with Tech Lead before starting
+- [x] 2.2 **TDD cycle**: `ParseResult` value object — parse a template with no placeholders returns unchanged text and empty notifications
 - [ ] 2.3 **TDD cycle**: Single placeholder replacement — returns parsed text with `replaced` notification (key, value, occurrences)
 - [ ] 2.4 **TDD cycle**: Multiple occurrences of the same placeholder — occurrences count is correct
 - [ ] 2.5 **TDD cycle**: Multiple different placeholders — each produces its own `replaced` notification
