@@ -90,9 +90,7 @@ describe("The TemplateEngine", () => {
     const result = engine.parse("Hello, ${name}!", { name: null });
 
     expect(result.text).toBe("Hello, ${name}!");
-    expect(result.notifications).toEqual([
-      { type: "null-value", key: "name" },
-    ]);
+    expect(result.notifications).toEqual([{ type: "null-value", key: "name" }]);
   });
 
   test("notifies when a provided variable has no matching placeholder", () => {
