@@ -1,0 +1,26 @@
+import { describe } from "@jest/globals";
+
+describe("The TemplateEngine", () => {
+  // TODO: Cases ordered from simplest to most complex
+  //
+  // Happy path:
+  // 1. parse a template with no placeholders returns unchanged text and empty notifications
+  // 2. parse an empty template returns empty text
+  //
+  // Single placeholder:
+  // 3. single placeholder replacement returns parsed text with 'replaced' notification (key, value, occurrences: 1)
+  //
+  // Multiple occurrences:
+  // 4. multiple occurrences of the same placeholder — occurrences count is correct
+  //
+  // Multiple different placeholders:
+  // 5. multiple different placeholders — each produces its own 'replaced' notification
+  //
+  // Error/edge cases:
+  // 6. missing variable — placeholder stays in text, 'missing-variable' notification produced
+  // 7. null value — placeholder stays in text, 'null-value' notification produced
+  // 8. unused variable — 'unused-variable' notification produced
+  //
+  // Mixed scenario:
+  // 9. mixed: replaced + missing + null + unused in one parse call
+});

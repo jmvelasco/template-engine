@@ -1,4 +1,6 @@
 node_modules
+coverage/
 .agent/
 .agents/
+.github/
 AGENTS.md
