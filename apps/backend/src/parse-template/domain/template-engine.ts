@@ -26,7 +26,14 @@ function render(
   return render(parsedTemplate, variables);
 }
 
-type ParseNotification = Record<string, unknown>;
+type ReplacedNotification = {
+  type: "replaced";
+  key: string;
+  value: string;
+  occurrences: number;
+};
+
+type ParseNotification = ReplacedNotification;
 
 interface ParseResult {
   text: string;
@@ -36,9 +43,32 @@ interface ParseResult {
 class TemplateEngine {
   parse(
     template: string,
-    _variables: Record<string, string | null>,
+    variables: Record<string, string | null>,
   ): ParseResult {
-    return { text: template, notifications: [] };
+    const placeholderPattern = /\$\{(\w+)\}/g;
+    const placeholdersInTemplate = new Set(
+      [...template.matchAll(placeholderPattern)].map((match) => match[1]),
+    );
+
+    if (placeholdersInTemplate.size === 0) {
+      return { text: template, notifications: [] };
+    }
+
+    let parsedText = template;
+    const notifications: ParseNotification[] = [];
+
+    for (const key of placeholdersInTemplate) {
+      const value = variables[key];
+      if (value === undefined || value === null) {
+        continue;
+      }
+      const placeholder = `\${${key}}`;
+      const occurrences = parsedText.split(placeholder).length - 1;
+      parsedText = parsedText.replaceAll(placeholder, value);
+      notifications.push({ type: "replaced", key, value, occurrences });
+    }
+
+    return { text: parsedText, notifications };
   }
 }
 
