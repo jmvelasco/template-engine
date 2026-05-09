@@ -26,10 +26,7 @@ function ParseResultDisplay(props: ParseResultDisplayProps) {
       {props.result.notifications.length > 0 && (
         <ul className={styles.notifications}>
           {props.result.notifications.map((notification, index) => (
-            <li
-              key={index}
-              className={NOTIFICATION_STYLES[notification.type]}
-            >
+            <li key={index} className={NOTIFICATION_STYLES[notification.type]}>
               {NOTIFICATION_LABELS[notification.type]}: {notification.key}
               {notification.type === "replaced" &&
                 ` → ${notification.value} (${notification.occurrences})`}

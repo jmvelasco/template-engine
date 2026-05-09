@@ -29,9 +29,7 @@ describe("TemplatePage", () => {
       screen.getByRole("textbox", { name: /template/i }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText(/key/i)).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /parse/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /parse/i })).toBeInTheDocument();
   });
 
   test("calls mutation and displays result when parse button is clicked", async () => {

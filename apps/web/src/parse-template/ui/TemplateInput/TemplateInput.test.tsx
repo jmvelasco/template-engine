@@ -5,7 +5,9 @@ describe("TemplateInput", () => {
   test("renders a textarea for template input", () => {
     render(<TemplateInput value="" onChange={() => {}} />);
 
-    expect(screen.getByRole("textbox", { name: /template/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("textbox", { name: /template/i }),
+    ).toBeInTheDocument();
   });
 
   test("calls onChange when user types in the textarea", () => {
@@ -22,6 +24,8 @@ describe("TemplateInput", () => {
   test("displays the provided value", () => {
     render(<TemplateInput value="Hello!" onChange={() => {}} />);
 
-    expect(screen.getByRole("textbox", { name: /template/i })).toHaveValue("Hello!");
+    expect(screen.getByRole("textbox", { name: /template/i })).toHaveValue(
+      "Hello!",
+    );
   });
 });

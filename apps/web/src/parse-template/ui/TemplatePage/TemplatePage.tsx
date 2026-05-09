@@ -30,15 +30,11 @@ function TemplatePage() {
       <h1 className={styles.title}>Template Engine</h1>
       <TemplateInput
         value={state.template}
-        onChange={(template) =>
-          setState((prev) => ({ ...prev, template }))
-        }
+        onChange={(template) => setState((prev) => ({ ...prev, template }))}
       />
       <VariablesInput
         variables={state.variables}
-        onChange={(variables) =>
-          setState((prev) => ({ ...prev, variables }))
-        }
+        onChange={(variables) => setState((prev) => ({ ...prev, variables }))}
       />
       <button
         type="button"
@@ -48,13 +44,9 @@ function TemplatePage() {
         Parse
       </button>
       {mutation.isError && (
-        <p className={styles.error}>
-          {(mutation.error as Error).message}
-        </p>
+        <p className={styles.error}>{(mutation.error as Error).message}</p>
       )}
-      {mutation.isSuccess && (
-        <ParseResultDisplay result={mutation.data} />
-      )}
+      {mutation.isSuccess && <ParseResultDisplay result={mutation.data} />}
     </main>
   );
 }
