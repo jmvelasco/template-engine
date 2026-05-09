@@ -43,10 +43,16 @@ type NullValueNotification = {
   key: string;
 };
 
+type UnusedVariableNotification = {
+  type: "unused-variable";
+  key: string;
+};
+
 type ParseNotification =
   | ReplacedNotification
   | MissingVariableNotification
-  | NullValueNotification;
+  | NullValueNotification
+  | UnusedVariableNotification;
 
 interface ParseResult {
   text: string;
@@ -64,7 +70,10 @@ class TemplateEngine {
     );
 
     if (placeholdersInTemplate.size === 0) {
-      return { text: template, notifications: [] };
+      const unusedNotifications: ParseNotification[] = Object.keys(
+        variables,
+      ).map((key) => ({ type: "unused-variable" as const, key }));
+      return { text: template, notifications: unusedNotifications };
     }
 
     let parsedText = template;
@@ -85,6 +94,13 @@ class TemplateEngine {
       const occurrences = parsedText.split(placeholder).length - 1;
       parsedText = parsedText.replaceAll(placeholder, value);
       notifications.push({ type: "replaced", key, value, occurrences });
+    }
+
+    const unusedVariables = Object.keys(variables).filter(
+      (key) => !placeholdersInTemplate.has(key),
+    );
+    for (const key of unusedVariables) {
+      notifications.push({ type: "unused-variable", key });
     }
 
     return { text: parsedText, notifications };
