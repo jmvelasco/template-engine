@@ -34,13 +34,13 @@
 > 🧪 _TDD: REASON → RED → GREEN → REFACTOR → RE-EVALUATE_
 > 📏 _backend-hexagonal skill (adapter implementation, no business logic in adapters), parse-api spec_
 
-- [ ] 4.1 **REASON**: List HTTP adapter test cases from the `parse-api` spec (success, missing fields, invalid JSON, CORS)
-- [ ] 4.2 **TDD cycle**: `POST /api/parse` with valid body returns 200 and `ParseResult` JSON
-- [ ] 4.3 **TDD cycle**: `POST /api/parse` with missing `template` field returns 400
-- [ ] 4.4 **TDD cycle**: `POST /api/parse` with missing `variables` field returns 400
-- [ ] 4.5 Add CORS middleware for cross-origin requests from web frontend 📐 _parse-api spec_
-- [ ] 4.6 Wire composition root in `index.ts` — manual DI, no framework 📐 _backend-hexagonal skill (manual DI)_
-- [ ] 4.7 Run `npm run format:fix` on all backend code changes
+- [x] 4.1 **REASON**: List HTTP adapter test cases from the `parse-api` spec (success, missing fields, invalid JSON, CORS)
+- [x] 4.2 **TDD cycle**: `POST /api/parse` with valid body returns 200 and `ParseResult` JSON
+- [x] 4.3 **TDD cycle**: `POST /api/parse` with missing `template` field returns 400
+- [x] 4.4 **TDD cycle**: `POST /api/parse` with missing `variables` field returns 400
+- [x] 4.5 Add CORS middleware for cross-origin requests from web frontend 📐 _parse-api spec_
+- [x] 4.6 Wire composition root in `index.ts` — manual DI, no framework 📐 _backend-hexagonal skill (manual DI)_
+- [x] 4.7 Run `npm run format:fix` on all backend code changes
 
 ## 5. Frontend Infrastructure — API Adapter & DI
 
