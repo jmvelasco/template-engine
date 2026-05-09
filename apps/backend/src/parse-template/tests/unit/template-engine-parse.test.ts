@@ -55,4 +55,21 @@ describe("The TemplateEngine", () => {
       { type: "replaced", key: "name", value: "Ada", occurrences: 2 },
     ]);
   });
+
+  test("produces separate notification for each different placeholder", () => {
+    const engine = new TemplateEngine();
+
+    const result = engine.parse("${greeting}, ${name}!", {
+      greeting: "Hi",
+      name: "Bob",
+    });
+
+    expect(result.text).toBe("Hi, Bob!");
+    expect(result.notifications).toEqual(
+      expect.arrayContaining([
+        { type: "replaced", key: "greeting", value: "Hi", occurrences: 1 },
+        { type: "replaced", key: "name", value: "Bob", occurrences: 1 },
+      ]),
+    );
+  });
 });
