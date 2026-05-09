@@ -46,12 +46,12 @@
 
 > 📏 _frontend-patterns skill (store layer, context DI, wired page pattern)_
 
-- [ ] 5.1 Create `parseTemplateApi.ts` — fetch adapter for `POST /api/parse`
-- [ ] 5.2 Create `ParseTemplateUseCase.ts` (frontend) — calls the API adapter
-- [ ] 5.3 Create `TemplateUseCases.context.ts` — Context for DI of use cases
-- [ ] 5.4 Create `Template.mutations.ts` — `useMutation` store hook that obtains use case from Context
-- [ ] 5.5 Create `AppProviders.tsx` — composes Context provider with React Query's `QueryClientProvider`
-- [ ] 5.6 Run `npm run format:fix` on all web code changes
+- [x] 5.1 Create `parseTemplateApi.ts` — fetch adapter for `POST /api/parse`
+- [x] 5.2 Create `ParseTemplateUseCase.ts` (frontend) — calls the API adapter
+- [x] 5.3 Create `TemplateUseCases.context.ts` — Context for DI of use cases
+- [x] 5.4 Create `Template.mutations.ts` — `useMutation` store hook that obtains use case from Context
+- [x] 5.5 Create `AppProviders.tsx` — composes Context provider with React Query's `QueryClientProvider`
+- [x] 5.6 Run `npm run format:fix` on all web code changes
 
 ## 6. Frontend UI — Components
 
