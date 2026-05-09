@@ -38,7 +38,15 @@ type MissingVariableNotification = {
   key: string;
 };
 
-type ParseNotification = ReplacedNotification | MissingVariableNotification;
+type NullValueNotification = {
+  type: "null-value";
+  key: string;
+};
+
+type ParseNotification =
+  | ReplacedNotification
+  | MissingVariableNotification
+  | NullValueNotification;
 
 interface ParseResult {
   text: string;
@@ -70,6 +78,7 @@ class TemplateEngine {
       }
       const value = variables[key];
       if (value === null) {
+        notifications.push({ type: "null-value", key });
         continue;
       }
       const placeholder = `\${${key}}`;
