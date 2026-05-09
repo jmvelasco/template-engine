@@ -35,10 +35,10 @@ interface ParseResult {
 
 class TemplateEngine {
   parse(
-    _template: string,
+    template: string,
     _variables: Record<string, string | null>,
   ): ParseResult {
-    return { text: "", notifications: [] };
+    return { text: template, notifications: [] };
   }
 }
 
