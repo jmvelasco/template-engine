@@ -25,9 +25,9 @@
 > 🧪 _TDD: REASON → RED → GREEN → REFACTOR → RE-EVALUATE_
 > 📏 _backend-hexagonal skill (use case orchestration, constructor injection), testing-standards (test doubles over mocks)_
 
-- [ ] 3.1 **REASON**: Identify use case test cases — use case delegates to `TemplateEngine.parse()` and returns the `ParseResult`
-- [ ] 3.2 **TDD cycle**: `ParseTemplateUseCase.execute(template, variables)` delegates to `TemplateEngine` and returns `ParseResult`
-- [ ] 3.3 Run `npm run format:fix` on all backend code changes
+- [x] 3.1 **REASON**: Identify use case test cases — use case delegates to `TemplateEngine.parse()` and returns the `ParseResult`
+- [x] 3.2 **TDD cycle**: `ParseTemplateUseCase.execute(template, variables)` delegates to `TemplateEngine` and returns `ParseResult`
+- [x] 3.3 Run `npm run format:fix` on all backend code changes
 
 ## 4. Backend Infrastructure — Express HTTP Adapter
 
