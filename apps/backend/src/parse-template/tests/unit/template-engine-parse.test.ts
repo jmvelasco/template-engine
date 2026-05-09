@@ -72,4 +72,15 @@ describe("The TemplateEngine", () => {
       ]),
     );
   });
+
+  test("keeps placeholder and notifies when variable is missing", () => {
+    const engine = new TemplateEngine();
+
+    const result = engine.parse("Hello, ${name}!", {});
+
+    expect(result.text).toBe("Hello, ${name}!");
+    expect(result.notifications).toEqual([
+      { type: "missing-variable", key: "name" },
+    ]);
+  });
 });

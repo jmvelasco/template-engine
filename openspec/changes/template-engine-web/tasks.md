@@ -13,7 +13,7 @@
 - [x] 2.2 **TDD cycle**: `ParseResult` value object — parse a template with no placeholders returns unchanged text and empty notifications
 - [x] 2.3 **TDD cycle**: Single placeholder replacement — returns parsed text with `replaced` notification (key, value, occurrences)
 - [x] 2.4 **TDD cycle**: Multiple occurrences of the same placeholder — occurrences count is correct
-- [ ] 2.5 **TDD cycle**: Multiple different placeholders — each produces its own `replaced` notification
+- [x] 2.5 **TDD cycle**: Multiple different placeholders — each produces its own `replaced` notification
 - [ ] 2.6 **TDD cycle**: Missing variable — placeholder stays, `missing-variable` notification produced
 - [ ] 2.7 **TDD cycle**: Null value — placeholder stays, `null-value` notification produced
 - [ ] 2.8 **TDD cycle**: Unused variable — `unused-variable` notification produced
