@@ -94,4 +94,15 @@ describe("The TemplateEngine", () => {
       { type: "null-value", key: "name" },
     ]);
   });
+
+  test("notifies when a provided variable has no matching placeholder", () => {
+    const engine = new TemplateEngine();
+
+    const result = engine.parse("Hello, world!", { age: "25" });
+
+    expect(result.text).toBe("Hello, world!");
+    expect(result.notifications).toEqual([
+      { type: "unused-variable", key: "age" },
+    ]);
+  });
 });
