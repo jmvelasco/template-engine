@@ -1,4 +1,5 @@
-import { describe } from "@jest/globals";
+import { describe, test, expect } from "@jest/globals";
+import { TemplateEngine } from "../../domain/template-engine";
 
 describe("The TemplateEngine", () => {
   // TODO: Cases ordered from simplest to most complex
@@ -23,4 +24,13 @@ describe("The TemplateEngine", () => {
   //
   // Mixed scenario:
   // 9. mixed: replaced + missing + null + unused in one parse call
+
+  test("parses unchanged text from template without placeholders", () => {
+    const engine = new TemplateEngine();
+
+    const result = engine.parse("Hello, world!", {});
+
+    expect(result.text).toBe("Hello, world!");
+    expect(result.notifications).toEqual([]);
+  });
 });

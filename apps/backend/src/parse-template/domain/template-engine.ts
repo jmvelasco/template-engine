@@ -26,4 +26,21 @@ function render(
   return render(parsedTemplate, variables);
 }
 
-export { render, logger };
+type ParseNotification = Record<string, unknown>;
+
+interface ParseResult {
+  text: string;
+  notifications: ParseNotification[];
+}
+
+class TemplateEngine {
+  parse(
+    _template: string,
+    _variables: Record<string, string | null>,
+  ): ParseResult {
+    return { text: "", notifications: [] };
+  }
+}
+
+export { render, logger, TemplateEngine };
+export type { ParseResult, ParseNotification };
