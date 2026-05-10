@@ -17,9 +17,9 @@
 ## 3. Backend Application & Infrastructure
 
 - [x] 3.1 Create `ParseTemplateUseCase.ts` in `apps/backend/src/application/` to orchestrate parsing, and add unit tests
-- [ ] 3.2 Create the HTTP controller and Express server in `apps/backend/src/infrastructure/http/` to expose POST `/api/parse`
+- [x] 3.2 Create the HTTP controller and Express server in `apps/backend/src/infrastructure/http/` to expose POST `/api/parse`
 - [ ] 3.3 Set up manual dependency injection in `apps/backend/src/index.ts` (composition root)
-- [ ] 3.4 Create E2E/integration tests verifying the full API flow from HTTP requests to parsing responses
+- [x] 3.4 Create E2E/integration tests verifying the full API flow from HTTP requests to parsing responses
 
 ## 4. Frontend Workspace & Tooling Setup
 
