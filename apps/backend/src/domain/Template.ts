@@ -11,9 +11,7 @@ export class Template {
   render(variables: Record<string, string | null>): ParsingResult {
     const notifier = new ParsingNotifier();
     const keysInTemplate = this.extractKeys();
-
     this.checkUnusedVariables(keysInTemplate, variables, notifier);
-
     if (keysInTemplate.length === 0) {
       return {
         renderedText: this.value,
@@ -21,15 +19,12 @@ export class Template {
         notifications: notifier.getNotifications(),
       };
     }
-
     const { renderedText, resolvedCount, unresolvedCount } = this.processKeys(
       keysInTemplate,
       variables,
       notifier,
     );
-
     const status = this.determineStatus(resolvedCount, unresolvedCount);
-
     return {
       renderedText,
       status,
@@ -41,11 +36,9 @@ export class Template {
     const regex = /\${([^}]+)}/g;
     let match;
     const matches: string[] = [];
-
     while ((match = regex.exec(this.value)) !== null) {
       matches.push(match[1]);
     }
-
     return Array.from(new Set(matches));
   }
 
@@ -74,10 +67,8 @@ export class Template {
     let renderedText = this.value;
     let resolvedCount = 0;
     let unresolvedCount = 0;
-
     for (const key of keysInTemplate) {
       const value = variables[key];
-
       if (value === undefined) {
         unresolvedCount++;
         notifier.notify(
@@ -99,7 +90,6 @@ export class Template {
         renderedText = renderedText.replaceAll(`\${${key}}`, value);
       }
     }
-
     return { renderedText, resolvedCount, unresolvedCount };
   }
 
@@ -110,11 +100,9 @@ export class Template {
     if (resolvedCount === 0) {
       return "FAILED";
     }
-
     if (unresolvedCount > 0) {
       return "PARTIAL";
     }
-
     return "SUCCESS";
   }
 }

@@ -19,7 +19,6 @@ export function ResultPresenter(props: ResultPresenterProps) {
         return styles.badgeFailed;
     }
   };
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -33,7 +32,6 @@ export function ResultPresenter(props: ResultPresenterProps) {
           ),
         )}
       </div>
-
       {props.error.fold(
         () => null,
         (errorMessage) => (
@@ -59,7 +57,6 @@ export function ResultPresenter(props: ResultPresenterProps) {
           </div>
         ),
       )}
-
       {props.result.fold(
         () => (
           <div className={styles.emptyState}>

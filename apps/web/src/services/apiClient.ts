@@ -17,7 +17,6 @@ export async function parseTemplate(
     },
     body: JSON.stringify({ templateContent, variables }),
   });
-
   if (!response.ok) {
     const errorBody = (await response
       .json()
@@ -26,6 +25,5 @@ export async function parseTemplate(
       errorBody.error || `HTTP error! status: ${response.status}`,
     );
   }
-
   return response.json() as Promise<ParsingResult>;
 }

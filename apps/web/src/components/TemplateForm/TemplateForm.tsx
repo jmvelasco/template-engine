@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./TemplateForm.module.css";
 
 export interface TemplateFormProps {
@@ -13,7 +12,6 @@ export function TemplateForm(props: TemplateFormProps) {
     e.preventDefault();
     props.onSubmit();
   };
-
   return (
     <form onSubmit={handleSubmit} className={styles.container}>
       <h3 className={styles.title}>Template Content</h3>

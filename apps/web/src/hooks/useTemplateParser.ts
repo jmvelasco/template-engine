@@ -80,14 +80,12 @@ export function useTemplateParser(dependencies: TemplateParserDependencies) {
       result: Maybe.none<ParsingResult>(),
       error: Maybe.none<string>(),
     }));
-
     const variablesRecord: Record<string, string | null> = {};
     state.variables.forEach((row) => {
       if (row.key.trim() !== "") {
         variablesRecord[row.key] = row.value;
       }
     });
-
     try {
       const result = await dependencies.parseTemplate(
         state.templateContent,

@@ -17,7 +17,6 @@ export function NotificationPanel(props: NotificationPanelProps) {
         return styles.lineWarning;
     }
   };
-
   return (
     <div className={styles.container}>
       <div className={styles.terminalHeader}>
@@ -28,7 +27,6 @@ export function NotificationPanel(props: NotificationPanelProps) {
         </div>
         <h4 className={styles.title}>System Log & Notifier Warnings</h4>
       </div>
-
       <div className={styles.terminalBody}>
         {props.notifications.length === 0 ? (
           <div className={styles.idleMessage}>
@@ -51,4 +49,5 @@ export function NotificationPanel(props: NotificationPanelProps) {
     </div>
   );
 }
+
 export default NotificationPanel;

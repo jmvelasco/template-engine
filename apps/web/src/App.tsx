@@ -8,7 +8,6 @@ import styles from "./App.module.css";
 
 export function App() {
   const parser = useTemplateParser({ parseTemplate });
-
   return (
     <div className={styles.container}>
       <header className={styles.navbar}>
@@ -20,7 +19,6 @@ export function App() {
         </div>
         <div className={styles.badge}>v1.0.0-beta</div>
       </header>
-
       <main className={styles.grid}>
         <section className={styles.column}>
           <TemplateForm
@@ -37,7 +35,6 @@ export function App() {
             onRemoveVariable={parser.removeVariable}
           />
         </section>
-
         <section className={styles.column}>
           <ResultPresenter result={parser.result} error={parser.error} />
           <NotificationPanel
@@ -48,7 +45,6 @@ export function App() {
           />
         </section>
       </main>
-
       <footer className={styles.footer}>
         <p>
           Designed & Built with 💜 by{" "}

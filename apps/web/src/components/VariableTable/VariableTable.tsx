@@ -36,7 +36,6 @@ export function VariableTable(props: VariableTableProps) {
           Add Row
         </button>
       </div>
-
       <div className={styles.tableContainer}>
         {props.variables.length === 0 ? (
           <div className={styles.emptyState}>
@@ -145,4 +144,5 @@ export function VariableTable(props: VariableTableProps) {
     </div>
   );
 }
+
 export default VariableTable;
