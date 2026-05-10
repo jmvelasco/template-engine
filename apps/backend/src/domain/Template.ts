@@ -1,3 +1,4 @@
+import { ParsingNotifier } from "./ParsingNotifier";
 import { ParsingResult } from "./types";
 
 export class Template {
@@ -8,6 +9,11 @@ export class Template {
   }
 
   render(variables: Record<string, string | null>): ParsingResult {
-    return null as any;
+    const notifier = new ParsingNotifier();
+    return {
+      renderedText: this.value,
+      status: "SUCCESS",
+      notifications: notifier.getNotifications(),
+    };
   }
 }

@@ -8,7 +8,7 @@
 ## 2. Backend Domain & Notifier (TDD)
 
 - [x] 2.1 Write initial RED test for the Notifier and rich result in `apps/backend/tests/unit/domain/Template.test.ts`
-- [ ] 2.2 Implement Domain Types and `ParsingNotifier` class with GREEN status returning success on empty strings
+- [x] 2.2 Implement Domain Types and `ParsingNotifier` class with GREEN status returning success on empty strings
 - [ ] 2.3 Progressively add test cases for single/multiple matching placeholders and implement them following TPP
 - [ ] 2.4 Add test cases for null values and missing placeholder keys, verifying correct warning notification codes
 - [ ] 2.5 Add test cases for partial parser success, and unused dictionary values, achieving GREEN state for all edge cases
