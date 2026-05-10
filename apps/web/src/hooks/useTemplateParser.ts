@@ -23,7 +23,7 @@ export interface TemplateParserDependencies {
   ) => Promise<ParsingResult>;
 }
 
-export function useTemplateParser(_dependencies: TemplateParserDependencies) {
+export function useTemplateParser(dependencies: TemplateParserDependencies) {
   const [state, setState] = useState<TemplateParserState>({
     templateContent: "",
     variables: [],
@@ -73,6 +73,41 @@ export function useTemplateParser(_dependencies: TemplateParserDependencies) {
     }));
   };
 
+  const parse = async (): Promise<void> => {
+    setState((prev) => ({
+      ...prev,
+      isParsing: true,
+      result: Maybe.none<ParsingResult>(),
+      error: Maybe.none<string>(),
+    }));
+
+    const variablesRecord: Record<string, string | null> = {};
+    state.variables.forEach((row) => {
+      if (row.key.trim() !== "") {
+        variablesRecord[row.key] = row.value;
+      }
+    });
+
+    try {
+      const result = await dependencies.parseTemplate(
+        state.templateContent,
+        variablesRecord,
+      );
+      setState((prev) => ({
+        ...prev,
+        isParsing: false,
+        result: Maybe.some(result),
+      }));
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      setState((prev) => ({
+        ...prev,
+        isParsing: false,
+        error: Maybe.some(errorMessage),
+      }));
+    }
+  };
+
   return {
     templateContent: state.templateContent,
     variables: state.variables,
@@ -84,5 +119,6 @@ export function useTemplateParser(_dependencies: TemplateParserDependencies) {
     updateVariableKey,
     updateVariableValue,
     removeVariable,
+    parse,
   };
 }

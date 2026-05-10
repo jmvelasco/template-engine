@@ -32,8 +32,8 @@
 - [x] 5.1 Create unit test `useTemplateParser.test.tsx` targeting the central custom hook
 - [x] 5.2 Implement RED state for initial hook state (template, variables table, result, isParsing, error)
 - [x] 5.3 Implement atomic state mutations for adding/editing/removing variables (Option C) and template updates, verifying in GREEN
-- [ ] 5.4 Implement the asynchronous parsing request inside the custom hook and mock/fake the API call to achieve green tests
-- [ ] 5.5 Refactor hook logic to ensure 0-3 parameters, single useState object, no nested helper functions, and no destructuring
+- [x] 5.4 Implement the asynchronous parsing request inside the custom hook and mock/fake the API call to achieve green tests
+- [x] 5.5 Refactor hook logic to ensure 0-3 parameters, single useState object, no nested helper functions, and no destructuring
 
 ## 6. Frontend Presentation Components (CSS Modules)
 
