@@ -1,4 +1,4 @@
-import { ParseResult } from "../domain/parse-result";
+import type { ParseResult } from "../../domain/parse-result";
 
 const API_BASE_URL = "http://localhost:3000";
 

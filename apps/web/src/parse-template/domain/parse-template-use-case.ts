@@ -1,4 +1,4 @@
-import { ParseResult } from "../domain/parse-result";
+import type { ParseResult } from "./parse-result";
 
 interface ParseTemplateUseCase {
   execute(
