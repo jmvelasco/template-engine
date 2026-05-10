@@ -7,7 +7,7 @@
     "isolatedModules": true,
     "jsx": "react",
     "outDir": "./lib",
-    "rootDir": "./src",
+    "rootDir": "./",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -30,7 +30,7 @@
     "declarationMap": true,
     "types": ["node", "jest"]
   },
-  "include": ["src/**/*"],
+  "include": ["apps/backend/src/**/*", "apps/web/src/**/*"],
   "exclude": [
     "node_modules",
     "lib",

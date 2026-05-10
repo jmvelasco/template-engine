@@ -2,6 +2,10 @@
   "name": "ts-eslint-prettier-jest-minimal",
   "version": "1.0.0",
   "description": "TypeScript template with ESLint, Prettier and Jest",
+  "workspaces": [
+    "apps/backend",
+    "apps/web"
+  ],
   "main": "lib/index.js",
   "scripts": {
     "prepare": "husky install",

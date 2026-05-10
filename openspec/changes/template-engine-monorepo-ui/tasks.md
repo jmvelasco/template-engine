@@ -1,9 +1,9 @@
 ## 1. Monorepo Setup & Workspace Configuration
 
-- [ ] 1.1 Restructure directories by creating `apps/backend` and `apps/web`
-- [ ] 1.2 Move existing `src/core/template-engine.ts` and `src/tests` into `apps/backend` as baseline files
-- [ ] 1.3 Initialize `package.json` configurations in root, `apps/backend`, and `apps/web` with proper npm workspaces
-- [ ] 1.4 Set up base TypeScript config files (`tsconfig.json`) across the workspace and workspaces
+- [x] 1.1 Restructure directories by creating `apps/backend` and `apps/web`
+- [x] 1.2 Move existing `src/core/template-engine.ts` and `src/tests` into `apps/backend` as baseline files
+- [x] 1.3 Initialize `package.json` configurations in root, `apps/backend`, and `apps/web` with proper npm workspaces
+- [x] 1.4 Set up base TypeScript config files (`tsconfig.json`) across the workspace and workspaces
 
 ## 2. Backend Domain & Notifier (TDD)
 
