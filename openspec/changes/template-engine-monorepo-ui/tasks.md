@@ -46,5 +46,5 @@
 
 ## 7. QA, Integration & Validation
 
-- [ ] 7.1 Verify complete end-to-end full stack flow locally by running backend API and Vite UI together
-- [ ] 7.2 Run unified validation script `npm run validate` checking compiling, linting, formatting, and testing across the entire monorepo
+- [x] 7.1 Verify complete end-to-end full stack flow locally by running backend API and Vite UI together
+- [x] 7.2 Run unified validation script `npm run validate` checking compiling, linting, formatting, and testing across the entire monorepo
