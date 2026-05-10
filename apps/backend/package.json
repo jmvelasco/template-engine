@@ -4,7 +4,7 @@
   "description": "Template Engine Backend",
   "main": "lib/index.js",
   "scripts": {
-    "dev": "tsc --watch",
+    "dev": "tsx --watch src/index.ts",
     "build": "npm run clean && tsc -b",
     "clean": "rm -rf lib coverage",
     "compile": "tsc --noEmit",
@@ -38,6 +38,7 @@
     "npm-check-updates": "19.1.2",
     "supertest": "^7.2.2",
     "ts-jest": "29.4.6",
+    "tsx": "^4.21.0",
     "typescript": "5.9.3"
   }
 }

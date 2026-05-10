@@ -58,16 +58,16 @@
 > 🧪 _TDD: REASON → RED → GREEN → REFACTOR → RE-EVALUATE (Vitest)_
 > 📏 _frontend-patterns skill (props.x, single useState, CSS Modules, no destructuring), parse-ui spec_
 
-- [ ] 6.1 **REASON**: List UI component test cases from the `parse-ui` spec
-- [ ] 6.2 **TDD cycle**: `TemplateInput` — textarea component for template input
-- [ ] 6.3 **TDD cycle**: `VariablesInput` — key-value editor for variables
-- [ ] 6.4 **TDD cycle**: `ParseResult` — displays parsed text and notifications with visual indicators
-- [ ] 6.5 **TDD cycle**: `TemplatePage` — composes inputs, button, result; triggers mutation on click
-- [ ] 6.6 Create `TemplateWiredPage.tsx` — Factory + AppProviders wiring 📐 _frontend-patterns skill (wired page pattern)_
-- [ ] 6.7 Wire `TemplateWiredPage` into `main.tsx` as the app entry point
-- [ ] 6.8 Run `npm run format:fix` on all web code changes
+- [x] 6.1 **REASON**: List UI component test cases from the `parse-ui` spec
+- [x] 6.2 **TDD cycle**: `TemplateInput` — textarea component for template input
+- [x] 6.3 **TDD cycle**: `VariablesInput` — key-value editor for variables
+- [x] 6.4 **TDD cycle**: `ParseResult` — displays parsed text and notifications with visual indicators
+- [x] 6.5 **TDD cycle**: `TemplatePage` — composes inputs, button, result; triggers mutation on click
+- [x] 6.6 Create `TemplateWiredPage.tsx` — Factory + AppProviders wiring 📐 _frontend-patterns skill (wired page pattern)_
+- [x] 6.7 Wire `TemplateWiredPage` into `main.tsx` as the app entry point
+- [x] 6.8 Run `npm run format:fix` on all web code changes
 
 ## 7. Integration Verification
 
-- [ ] 7.1 Start backend and web dev servers, verify end-to-end flow: enter template + variables → click Parse → see result with notifications
-- [ ] 7.2 Run full validation: `npm run validate` in both workspaces
+- [x] 7.1 Start backend and web dev servers, verify end-to-end flow: enter template + variables → click Parse → see result with notifications
+- [x] 7.2 Run full validation: `npm run validate` in both workspaces
