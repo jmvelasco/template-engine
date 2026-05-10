@@ -24,7 +24,7 @@ export interface TemplateParserDependencies {
 }
 
 export function useTemplateParser(_dependencies: TemplateParserDependencies) {
-  const [state] = useState<TemplateParserState>({
+  const [state, setState] = useState<TemplateParserState>({
     templateContent: "",
     variables: [],
     result: Maybe.none<ParsingResult>(),
@@ -32,11 +32,57 @@ export function useTemplateParser(_dependencies: TemplateParserDependencies) {
     error: Maybe.none<string>(),
   });
 
+  const updateTemplateContent = (templateContent: string): void => {
+    setState((prev) => ({ ...prev, templateContent }));
+  };
+
+  const addVariable = (): void => {
+    const newRow: VariableRow = {
+      id: String(Date.now() + Math.random()),
+      key: "",
+      value: "",
+    };
+    setState((prev) => ({
+      ...prev,
+      variables: [...prev.variables, newRow],
+    }));
+  };
+
+  const updateVariableKey = (id: string, key: string): void => {
+    setState((prev) => ({
+      ...prev,
+      variables: prev.variables.map((row) =>
+        row.id === id ? { ...row, key } : row,
+      ),
+    }));
+  };
+
+  const updateVariableValue = (id: string, value: string | null): void => {
+    setState((prev) => ({
+      ...prev,
+      variables: prev.variables.map((row) =>
+        row.id === id ? { ...row, value } : row,
+      ),
+    }));
+  };
+
+  const removeVariable = (id: string): void => {
+    setState((prev) => ({
+      ...prev,
+      variables: prev.variables.filter((row) => row.id !== id),
+    }));
+  };
+
   return {
     templateContent: state.templateContent,
     variables: state.variables,
     isParsing: state.isParsing,
     result: state.result,
     error: state.error,
+    updateTemplateContent,
+    addVariable,
+    updateVariableKey,
+    updateVariableValue,
+    removeVariable,
   };
 }
