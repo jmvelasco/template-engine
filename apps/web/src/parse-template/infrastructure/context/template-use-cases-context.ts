@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { ParseTemplateUseCase } from "../../domain/parse-template-use-case";
+import type { ParseTemplateUseCase } from "../../domain/parse-template-use-case";
 
 interface TemplateUseCases {
   parseTemplate: ParseTemplateUseCase;

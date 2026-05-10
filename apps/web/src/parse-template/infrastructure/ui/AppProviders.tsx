@@ -1,8 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  TemplateUseCasesContext,
-  TemplateUseCases,
-} from "../context/template-use-cases-context";
+import { TemplateUseCasesContext } from "../context/template-use-cases-context";
+import type { TemplateUseCases } from "../context/template-use-cases-context";
 import React from "react";
 
 const queryClient = new QueryClient();

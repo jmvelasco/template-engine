@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { ParseResultDisplay } from "./ParseResultDisplay";
-import { ParseResult } from "../../domain/parse-result";
+import type { ParseResult } from "../../domain/parse-result";
 
 describe("ParseResultDisplay", () => {
   test("displays parsed text", () => {

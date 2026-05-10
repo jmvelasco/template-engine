@@ -1,5 +1,5 @@
 import styles from "./ParseResultDisplay.module.css";
-import { ParseResult, ParseNotification } from "../../domain/parse-result";
+import type { ParseResult, ParseNotification } from "../../domain/parse-result";
 
 interface ParseResultDisplayProps {
   result: ParseResult;

@@ -1,6 +1,6 @@
 import { parseTemplateApi } from "../api/parse-template-api";
-import { ParseResult } from "../../domain/parse-result";
-import { ParseTemplateUseCase } from "../../domain/parse-template-use-case";
+import type { ParseResult } from "../../domain/parse-result";
+import type { ParseTemplateUseCase } from "../../domain/parse-template-use-case";
 
 class ApiParseTemplateUseCase implements ParseTemplateUseCase {
   async execute(

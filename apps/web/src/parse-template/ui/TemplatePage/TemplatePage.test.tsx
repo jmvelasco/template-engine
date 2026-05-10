@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { TemplatePage } from "./TemplatePage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TemplateUseCasesContext } from "../../infrastructure/context/template-use-cases-context";
-import { ParseTemplateUseCase } from "../../domain/parse-template-use-case";
+import type { ParseTemplateUseCase } from "../../domain/parse-template-use-case";
 
 function renderWithProviders(parseTemplate: ParseTemplateUseCase) {
   const queryClient = new QueryClient({
