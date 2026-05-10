@@ -90,4 +90,48 @@ describe("The Template", () => {
       },
     ]);
   });
+
+  test("returns partial status when some placeholders are resolved and others are missing", () => {
+    // Arrange
+    const templateContent = "Hello ${name}, your age is ${age}";
+    const variables = { name: "Ada" };
+
+    // Act
+    const template = Template.create(templateContent);
+    const result = template.render(variables);
+
+    // Assert
+    expect(result.renderedText).toBe("Hello Ada, your age is ${age}");
+    expect(result.status).toBe("PARTIAL");
+    expect(result.notifications).toEqual([
+      {
+        type: "WARNING",
+        message: "Variable 'age' is required but was not provided in the dictionary.",
+        code: "MISSING_VARIABLE",
+        details: { key: "age" },
+      },
+    ]);
+  });
+
+  test("generates a warning when a dictionary variable is unused in the template", () => {
+    // Arrange
+    const templateContent = "Hello world!";
+    const variables = { unusedKey: "value" };
+
+    // Act
+    const template = Template.create(templateContent);
+    const result = template.render(variables);
+
+    // Assert
+    expect(result.renderedText).toBe("Hello world!");
+    expect(result.status).toBe("SUCCESS");
+    expect(result.notifications).toEqual([
+      {
+        type: "WARNING",
+        message: "Variable 'unusedKey' is defined in the dictionary but was not used in the template.",
+        code: "UNUSED_VARIABLE",
+        details: { key: "unusedKey" },
+      },
+    ]);
+  });
 });
