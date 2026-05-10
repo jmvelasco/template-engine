@@ -13,7 +13,7 @@
     "build": "npm run clean && tsc -b",
     "clean": "rm -rf lib coverage",
     "analyze": "npm run lint:fix && npm run compile",
-    "compile": "tsc --noEmit",
+    "compile": "tsc --noEmit && tsc -p apps/web/tsconfig.app.json --noEmit",
     "compile:watch": "tsc --noEmit --watch",
     "compile:build": "tsc -b",
     "lint": "eslint . --ext .ts,.tsx",

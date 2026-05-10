@@ -25,7 +25,7 @@
 
 - [x] 4.1 Initialize React/Vite development scaffolding inside `apps/web`
 - [x] 4.2 Configure Vitest (or Jest), ESLint, and Prettier rules in the frontend workspace matching existing code-standards
-- [ ] 4.3 Add necessary shared types, Maybe monad implementation, and API helper client to fetch parsing results from the backend
+- [x] 4.3 Add necessary shared types, Maybe monad implementation, and API helper client to fetch parsing results from the backend
 
 ## 5. Frontend Custom Hook Implementation (TDD)
 
