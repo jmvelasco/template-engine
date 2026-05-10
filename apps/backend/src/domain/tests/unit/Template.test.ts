@@ -31,4 +31,19 @@ describe("The Template", () => {
     expect(result.status).toBe("SUCCESS");
     expect(result.notifications).toEqual([]);
   });
+
+  test("replaces multiple identical placeholders with matching variable successfully", () => {
+    // Arrange
+    const templateContent = "${name} and ${name}";
+    const variables = { name: "Ada" };
+
+    // Act
+    const template = Template.create(templateContent);
+    const result = template.render(variables);
+
+    // Assert
+    expect(result.renderedText).toBe("Ada and Ada");
+    expect(result.status).toBe("SUCCESS");
+    expect(result.notifications).toEqual([]);
+  });
 });
