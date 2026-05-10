@@ -11,7 +11,7 @@
 - [x] 2.2 Implement Domain Types and `ParsingNotifier` class with GREEN status returning success on empty strings
 - [x] 2.3 Progressively add test cases for single/multiple matching placeholders and implement them following TPP
 - [x] 2.4 Add test cases for null values and missing placeholder keys, verifying correct warning notification codes
-- [ ] 2.5 Add test cases for partial parser success, and unused dictionary values, achieving GREEN state for all edge cases
+- [x] 2.5 Add test cases for partial parser success, and unused dictionary values, achieving GREEN state for all edge cases
 - [ ] 2.6 Refactor domain code to eliminate duplication and ensure adherence to coding standards (no comments, short functions)
 
 ## 3. Backend Application & Infrastructure

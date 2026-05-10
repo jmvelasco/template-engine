@@ -22,6 +22,17 @@ export class Template {
 
     const uniqueKeysInTemplate = Array.from(new Set(matches));
 
+    for (const key of Object.keys(variables)) {
+      if (!uniqueKeysInTemplate.includes(key)) {
+        notifier.notify(
+          "WARNING",
+          `Variable '${key}' is defined in the dictionary but was not used in the template.`,
+          "UNUSED_VARIABLE",
+          { key },
+        );
+      }
+    }
+
     if (uniqueKeysInTemplate.length === 0) {
       return {
         renderedText,
@@ -42,7 +53,7 @@ export class Template {
           "WARNING",
           `Variable '${key}' is required but was not provided in the dictionary.`,
           "MISSING_VARIABLE",
-          { key }
+          { key },
         );
       } else if (value === null) {
         unresolvedCount++;
@@ -50,7 +61,7 @@ export class Template {
           "WARNING",
           `Variable '${key}' has a null value.`,
           "NULL_VARIABLE_VALUE",
-          { key }
+          { key },
         );
       } else {
         resolvedCount++;

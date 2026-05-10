@@ -84,7 +84,8 @@ describe("The Template", () => {
     expect(result.notifications).toEqual([
       {
         type: "WARNING",
-        message: "Variable 'name' is required but was not provided in the dictionary.",
+        message:
+          "Variable 'name' is required but was not provided in the dictionary.",
         code: "MISSING_VARIABLE",
         details: { key: "name" },
       },
@@ -106,7 +107,8 @@ describe("The Template", () => {
     expect(result.notifications).toEqual([
       {
         type: "WARNING",
-        message: "Variable 'age' is required but was not provided in the dictionary.",
+        message:
+          "Variable 'age' is required but was not provided in the dictionary.",
         code: "MISSING_VARIABLE",
         details: { key: "age" },
       },
@@ -128,7 +130,8 @@ describe("The Template", () => {
     expect(result.notifications).toEqual([
       {
         type: "WARNING",
-        message: "Variable 'unusedKey' is defined in the dictionary but was not used in the template.",
+        message:
+          "Variable 'unusedKey' is defined in the dictionary but was not used in the template.",
         code: "UNUSED_VARIABLE",
         details: { key: "unusedKey" },
       },
