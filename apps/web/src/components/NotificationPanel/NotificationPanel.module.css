@@ -1,0 +1,150 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: #0b0d16;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.container:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 25px rgba(170, 59, 255, 0.2);
+}
+
+.terminalHeader {
+  display: flex;
+  align-items: center;
+  background-color: #151824;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #1e293b;
+  gap: 1rem;
+}
+
+.dotsContainer {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dotClose {
+  background-color: #ef4444;
+}
+
+.dotMinimize {
+  background-color: #f59e0b;
+}
+
+.dotMaximize {
+  background-color: #10b981;
+}
+
+.title {
+  color: #94a3b8;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.terminalBody {
+  background-color: #08090f;
+  padding: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  max-height: 15rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Custom scrollbar for terminal */
+.terminalBody::-webkit-scrollbar {
+  width: 6px;
+}
+
+.terminalBody::-webkit-scrollbar-track {
+  background: #08090f;
+}
+
+.terminalBody::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+
+.terminalBody::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+.line {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.lineWarning {
+  color: #fca5a5;
+}
+
+.lineInfo {
+  color: #93c5fd;
+}
+
+.lineError {
+  color: #fca5a5;
+}
+
+.timestamp {
+  color: #475569;
+  flex-shrink: 0;
+}
+
+.severity {
+  font-weight: 700;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.code {
+  color: #fbbf24;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.message {
+  color: #e2e8f0;
+}
+
+.idleMessage {
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.idleCursor {
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  background-color: #10b981;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}

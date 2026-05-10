@@ -47,4 +47,8 @@ export class Maybe<T> {
     }
     return Maybe.fromValue(fn(this.value as T));
   }
+
+  fold<R>(onNone: () => R, onSome: (value: T) => R): R {
+    return this.isSome() ? onSome(this.value as T) : onNone();
+  }
 }

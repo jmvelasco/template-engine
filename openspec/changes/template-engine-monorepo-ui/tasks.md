@@ -37,12 +37,12 @@
 
 ## 6. Frontend Presentation Components (CSS Modules)
 
-- [ ] 6.1 Create base CSS variables and global layout inside `apps/web/src/index.css`
-- [ ] 6.2 Implement `VariableTable` (Option C) using CSS Modules for key-value row insertion, modification, and removal
-- [ ] 6.3 Implement `TemplateForm` textarea with premium hover/focus states and submit actions
-- [ ] 6.4 Implement `ResultPresenter` displaying the parsed text with visual colored badges for SUCCESS, PARTIAL, and FAILED status
-- [ ] 6.5 Implement `NotificationPanel` mimicking a terminal console window showing severity-colored warnings from the notifier
-- [ ] 6.6 Wire all components inside `App.tsx` following the Container/Wired Page pattern (props.x, hook.property, no destructuring)
+- [x] 6.1 Create base CSS variables and global layout inside `apps/web/src/index.css`
+- [x] 6.2 Implement `VariableTable` (Option C) using CSS Modules for key-value row insertion, modification, and removal
+- [x] 6.3 Implement `TemplateForm` textarea with premium hover/focus states and submit actions
+- [x] 6.4 Implement `ResultPresenter` displaying the parsed text with visual colored badges for SUCCESS, PARTIAL, and FAILED status
+- [x] 6.5 Implement `NotificationPanel` mimicking a terminal console window showing severity-colored warnings from the notifier
+- [x] 6.6 Wire all components inside `App.tsx` following the Container/Wired Page pattern (props.x, hook.property, no destructuring)
 
 ## 7. QA, Integration & Validation
 
