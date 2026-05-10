@@ -10,8 +10,34 @@ export class Template {
 
   render(variables: Record<string, string | null>): ParsingResult {
     const notifier = new ParsingNotifier();
-    let renderedText = this.value;
+    const keysInTemplate = this.extractKeys();
 
+    this.checkUnusedVariables(keysInTemplate, variables, notifier);
+
+    if (keysInTemplate.length === 0) {
+      return {
+        renderedText: this.value,
+        status: "SUCCESS",
+        notifications: notifier.getNotifications(),
+      };
+    }
+
+    const { renderedText, resolvedCount, unresolvedCount } = this.processKeys(
+      keysInTemplate,
+      variables,
+      notifier,
+    );
+
+    const status = this.determineStatus(resolvedCount, unresolvedCount);
+
+    return {
+      renderedText,
+      status,
+      notifications: notifier.getNotifications(),
+    };
+  }
+
+  private extractKeys(): string[] {
     const regex = /\${([^}]+)}/g;
     let match;
     const matches: string[] = [];
@@ -20,10 +46,16 @@ export class Template {
       matches.push(match[1]);
     }
 
-    const uniqueKeysInTemplate = Array.from(new Set(matches));
+    return Array.from(new Set(matches));
+  }
 
+  private checkUnusedVariables(
+    keysInTemplate: string[],
+    variables: Record<string, string | null>,
+    notifier: ParsingNotifier,
+  ): void {
     for (const key of Object.keys(variables)) {
-      if (!uniqueKeysInTemplate.includes(key)) {
+      if (!keysInTemplate.includes(key)) {
         notifier.notify(
           "WARNING",
           `Variable '${key}' is defined in the dictionary but was not used in the template.`,
@@ -32,19 +64,18 @@ export class Template {
         );
       }
     }
+  }
 
-    if (uniqueKeysInTemplate.length === 0) {
-      return {
-        renderedText,
-        status: "SUCCESS",
-        notifications: notifier.getNotifications(),
-      };
-    }
-
+  private processKeys(
+    keysInTemplate: string[],
+    variables: Record<string, string | null>,
+    notifier: ParsingNotifier,
+  ): { renderedText: string; resolvedCount: number; unresolvedCount: number } {
+    let renderedText = this.value;
     let resolvedCount = 0;
     let unresolvedCount = 0;
 
-    for (const key of uniqueKeysInTemplate) {
+    for (const key of keysInTemplate) {
       const value = variables[key];
 
       if (value === undefined) {
@@ -69,17 +100,21 @@ export class Template {
       }
     }
 
-    let status: ParsingStatus = "SUCCESS";
+    return { renderedText, resolvedCount, unresolvedCount };
+  }
+
+  private determineStatus(
+    resolvedCount: number,
+    unresolvedCount: number,
+  ): ParsingStatus {
     if (resolvedCount === 0) {
-      status = "FAILED";
-    } else if (unresolvedCount > 0) {
-      status = "PARTIAL";
+      return "FAILED";
     }
 
-    return {
-      renderedText,
-      status,
-      notifications: notifier.getNotifications(),
-    };
+    if (unresolvedCount > 0) {
+      return "PARTIAL";
+    }
+
+    return "SUCCESS";
   }
 }
