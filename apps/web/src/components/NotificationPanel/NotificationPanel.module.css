@@ -1,8 +1,8 @@
 .container {
   display: flex;
   flex-direction: column;
-  background-color: #0b0d16;
-  border: 1px solid #1e293b;
+  background-color: var(--terminal-bg-outer);
+  border: 1px solid var(--terminal-border);
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -17,9 +17,9 @@
 .terminalHeader {
   display: flex;
   align-items: center;
-  background-color: #151824;
+  background-color: var(--terminal-bg-header);
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #1e293b;
+  border-bottom: 1px solid var(--terminal-border);
   gap: 1rem;
 }
 
@@ -35,19 +35,19 @@
 }
 
 .dotClose {
-  background-color: #ef4444;
+  background-color: var(--terminal-dot-close);
 }
 
 .dotMinimize {
-  background-color: #f59e0b;
+  background-color: var(--terminal-dot-min);
 }
 
 .dotMaximize {
-  background-color: #10b981;
+  background-color: var(--terminal-dot-max);
 }
 
 .title {
-  color: #94a3b8;
+  color: var(--terminal-text-title);
   font-family: var(--font-sans);
   font-size: 0.8rem;
   font-weight: 600;
@@ -57,7 +57,7 @@
 }
 
 .terminalBody {
-  background-color: #08090f;
+  background-color: var(--terminal-bg-inner);
   padding: 1.25rem;
   font-family: var(--font-mono);
   font-size: 0.8125rem;
@@ -75,11 +75,11 @@
 }
 
 .terminalBody::-webkit-scrollbar-track {
-  background: #08090f;
+  background: var(--terminal-bg-inner);
 }
 
 .terminalBody::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--terminal-border);
   border-radius: 3px;
 }
 
@@ -96,19 +96,19 @@
 }
 
 .lineWarning {
-  color: #fca5a5;
+  color: var(--terminal-text-warning);
 }
 
 .lineInfo {
-  color: #93c5fd;
+  color: var(--terminal-text-info);
 }
 
 .lineError {
-  color: #fca5a5;
+  color: var(--terminal-text-warning);
 }
 
 .timestamp {
-  color: #475569;
+  color: var(--terminal-text-muted);
   flex-shrink: 0;
 }
 
@@ -119,17 +119,17 @@
 }
 
 .code {
-  color: #fbbf24;
+  color: var(--terminal-text-code);
   font-weight: 600;
   flex-shrink: 0;
 }
 
 .message {
-  color: #e2e8f0;
+  color: var(--terminal-text-default);
 }
 
 .idleMessage {
-  color: #10b981;
+  color: var(--terminal-text-success);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -139,7 +139,7 @@
   display: inline-block;
   width: 8px;
   height: 14px;
-  background-color: #10b981;
+  background-color: var(--terminal-text-success);
   animation: blink 1s step-end infinite;
 }
 

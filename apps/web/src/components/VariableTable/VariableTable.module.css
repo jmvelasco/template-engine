@@ -30,7 +30,7 @@
 
 .addButton {
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  color: #ffffff;
+  color: var(--text-white);
   border: none;
   border-radius: 8px;
   padding: 0.5rem 1rem;
@@ -46,7 +46,7 @@
 
 .addButton:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(170, 59, 255, 0.3);
+  box-shadow: var(--shadow-button-hover);
 }
 
 .addButton:active {

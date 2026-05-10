@@ -45,7 +45,7 @@
 
 .submitButton {
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  color: #ffffff;
+  color: var(--text-white);
   border: none;
   border-radius: 8px;
   padding: 0.75rem 1.5rem;
@@ -62,7 +62,7 @@
 
 .submitButton:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(170, 59, 255, 0.4);
+  box-shadow: var(--shadow-button-hover);
 }
 
 .submitButton:active:not(:disabled) {
@@ -78,7 +78,7 @@
   width: 1.25rem;
   height: 1.25rem;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #ffffff;
+  border-top-color: var(--text-white);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
