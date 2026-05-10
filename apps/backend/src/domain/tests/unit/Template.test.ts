@@ -16,4 +16,19 @@ describe("The Template", () => {
     expect(result.status).toBe("SUCCESS");
     expect(result.notifications).toEqual([]);
   });
+
+  test("replaces a single placeholder with its matching variable successfully", () => {
+    // Arrange
+    const templateContent = "Hello, ${name}!";
+    const variables = { name: "John" };
+
+    // Act
+    const template = Template.create(templateContent);
+    const result = template.render(variables);
+
+    // Assert
+    expect(result.renderedText).toBe("Hello, John!");
+    expect(result.status).toBe("SUCCESS");
+    expect(result.notifications).toEqual([]);
+  });
 });
