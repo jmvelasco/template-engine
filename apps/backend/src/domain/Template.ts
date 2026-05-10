@@ -1,5 +1,5 @@
 import { ParsingNotifier } from "./ParsingNotifier";
-import { ParsingResult } from "./types";
+import { ParsingResult, ParsingStatus } from "./types";
 
 export class Template {
   private constructor(public readonly value: string) {}
@@ -22,16 +22,52 @@ export class Template {
 
     const uniqueKeysInTemplate = Array.from(new Set(matches));
 
+    if (uniqueKeysInTemplate.length === 0) {
+      return {
+        renderedText,
+        status: "SUCCESS",
+        notifications: notifier.getNotifications(),
+      };
+    }
+
+    let resolvedCount = 0;
+    let unresolvedCount = 0;
+
     for (const key of uniqueKeysInTemplate) {
       const value = variables[key];
-      if (value !== undefined && value !== null) {
+
+      if (value === undefined) {
+        unresolvedCount++;
+        notifier.notify(
+          "WARNING",
+          `Variable '${key}' is required but was not provided in the dictionary.`,
+          "MISSING_VARIABLE",
+          { key }
+        );
+      } else if (value === null) {
+        unresolvedCount++;
+        notifier.notify(
+          "WARNING",
+          `Variable '${key}' has a null value.`,
+          "NULL_VARIABLE_VALUE",
+          { key }
+        );
+      } else {
+        resolvedCount++;
         renderedText = renderedText.replaceAll(`\${${key}}`, value);
       }
     }
 
+    let status: ParsingStatus = "SUCCESS";
+    if (resolvedCount === 0) {
+      status = "FAILED";
+    } else if (unresolvedCount > 0) {
+      status = "PARTIAL";
+    }
+
     return {
       renderedText,
-      status: "SUCCESS",
+      status,
       notifications: notifier.getNotifications(),
     };
   }
