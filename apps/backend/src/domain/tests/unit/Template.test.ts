@@ -46,4 +46,48 @@ describe("The Template", () => {
     expect(result.status).toBe("SUCCESS");
     expect(result.notifications).toEqual([]);
   });
+
+  test("generates a warning when a placeholder variable is null", () => {
+    // Arrange
+    const templateContent = "Hello, ${name}!";
+    const variables = { name: null };
+
+    // Act
+    const template = Template.create(templateContent);
+    const result = template.render(variables);
+
+    // Assert
+    expect(result.renderedText).toBe("Hello, ${name}!");
+    expect(result.status).toBe("FAILED");
+    expect(result.notifications).toEqual([
+      {
+        type: "WARNING",
+        message: "Variable 'name' has a null value.",
+        code: "NULL_VARIABLE_VALUE",
+        details: { key: "name" },
+      },
+    ]);
+  });
+
+  test("generates a warning when a placeholder variable is missing in the dictionary", () => {
+    // Arrange
+    const templateContent = "Hello, ${name}!";
+    const variables = {};
+
+    // Act
+    const template = Template.create(templateContent);
+    const result = template.render(variables);
+
+    // Assert
+    expect(result.renderedText).toBe("Hello, ${name}!");
+    expect(result.status).toBe("FAILED");
+    expect(result.notifications).toEqual([
+      {
+        type: "WARNING",
+        message: "Variable 'name' is required but was not provided in the dictionary.",
+        code: "MISSING_VARIABLE",
+        details: { key: "name" },
+      },
+    ]);
+  });
 });
