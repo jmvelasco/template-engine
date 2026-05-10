@@ -34,3 +34,4 @@ rules:
     - "Tasks with behavior use TDD: REASON -> RED -> GREEN -> REFACTOR -> RE-EVALUATE"
     - "Order inside-out: domain -> application -> infrastructure"
     - "Run `npm run format:fix` on all code changes"
+    - "Before marking a task group as done, run `npx tsc --noEmit` in the affected workspace to catch broken imports and type errors. Do NOT run it after every TDD cycle — only once at the end of each task group."
