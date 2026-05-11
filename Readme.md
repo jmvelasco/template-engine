@@ -20,13 +20,66 @@ render("Hello, ${name}!", { name: "Ada" })
 - If a variable appears multiple times, all occurrences must be replaced
 - The template may contain no placeholders at all — return it unchanged
 ## Example cases
- 
-| Template | Variables | Output |
-|---|---|---|
-| `"Hello, ${name}!"` | `{ name: "Ada" }` | `"Hello, Ada!"` |
-| `"${greeting}, ${name}!"` | `{ greeting: "Hi", name: "Bob" }` | `"Hi, Bob!"` |
-| `"No placeholders"` | `{}` | `"No placeholders"` |
-| `"Dear ${name}, your code is ${quality}."` | `{ name: "Alice", quality: "clean" }` | `"Dear Alice, your code is clean."` |
+
+### Basic replacement
+
+| # | Scenario | Template | Variables | Output |
+|---|---|---|---|---|
+| 1 | Single placeholder | `"Hello, ${name}!"` | `{ name: "Ada" }` | `"Hello, Ada!"` |
+| 2 | Multiple different placeholders | `"${greeting}, ${name}!"` | `{ greeting: "Hi", name: "Bob" }` | `"Hi, Bob!"` |
+| 3 | Repeated placeholder replaced everywhere | `"${name} meets ${name}"` | `{ name: "Ada" }` | `"Ada meets Ada"` |
+| 4 | Placeholder at start of template | `"${name} is here"` | `{ name: "Ada" }` | `"Ada is here"` |
+| 5 | Placeholder at end of template | `"Hello ${name}"` | `{ name: "Ada" }` | `"Hello Ada"` |
+| 6 | Template is only a placeholder | `"${name}"` | `{ name: "Ada" }` | `"Ada"` |
+| 7 | Adjacent placeholders with no separator | `"${first}${last}"` | `{ first: "Ada", last: "L" }` | `"AdaL"` |
+
+### No replacement needed
+
+| # | Scenario | Template | Variables | Output |
+|---|---|---|---|---|
+| 8 | No placeholders in template | `"Hello, world!"` | `{}` | `"Hello, world!"` |
+| 9 | No placeholders, variables ignored | `"Hello, world!"` | `{ name: "Ada" }` | `"Hello, world!"` |
+| 10 | Empty template, no variables | `""` | `{}` | `""` |
+| 11 | Empty template, variables ignored | `""` | `{ name: "Ada" }` | `""` |
+
+### Missing variables
+
+| # | Scenario | Template | Variables | Output |
+|---|---|---|---|---|
+| 12 | Placeholder with no matching variable | `"Hello, ${name}!"` | `{}` | `"Hello, ${name}!"` |
+| 13 | Extra variables with no matching placeholder | `"Hello!"` | `{ name: "Ada" }` | `"Hello!"` |
+| 14 | Partial match — some found, some missing | `"${name} is ${age}"` | `{ name: "Ada" }` | `"Ada is ${age}"` |
+| 15 | Multiple missing in complex template | `"${a} ${b} ${c}"` | `{ b: "ok" }` | `"${a} ok ${c}"` |
+
+### Special variable values
+
+| # | Scenario | Template | Variables | Output |
+|---|---|---|---|---|
+| 16 | Empty string as value | `"Hello, ${name}!"` | `{ name: "" }` | `"Hello, !"` |
+| 17 | Value with spaces | `"Hello, ${name}!"` | `{ name: "Ada Lovelace" }` | `"Hello, Ada Lovelace!"` |
+| 18 | Value with special characters | `"Say ${msg}"` | `{ msg: "x < y & z > w" }` | `"Say x < y & z > w"` |
+| 19 | Value contains placeholder-like syntax | `"Hello, ${name}!"` | `{ name: "${other}" }` | `"Hello, ${other}!"` |
+| 20 | Null value prevents replacement | `"Hello, ${name}!"` | `{ name: null }` | `"Hello, ${name}!"` |
+| 21 | Numeric value | `"Age: ${age}"` | `{ age: "30" }` | `"Age: 30"` |
+
+### Malformed or tricky placeholders
+
+| # | Scenario | Template | Variables | Output |
+|---|---|---|---|---|
+| 22 | Unclosed placeholder — not a valid pattern | `"Hello, ${name"` | `{ name: "Ada" }` | `"Hello, ${name"` |
+| 23 | Missing dollar sign — not a valid pattern | `"Hello, {name}!"` | `{ name: "Ada" }` | `"Hello, {name}!"` |
+| 24 | Empty placeholder name `${}` | `"Hello, ${}!"` | `{}` | `"Hello, ${}!"` |
+| 25 | Nested braces — not supported | `"${${key}}"` | `{ key: "name" }` | `"${${key}}"` |
+| 26 | Extra closing brace | `"Hello, ${name}}!"` | `{ name: "Ada" }` | `"Hello, Ada}!"` |
+| 27 | Placeholder with spaces in name | `"Hello, ${ name }!"` | `{ name: "Ada" }` | `"Hello, ${ name }!"` |
+
+### Whitespace and formatting
+
+| # | Scenario | Template | Variables | Output |
+|---|---|---|---|---|
+| 28 | Template is only whitespace | `"   "` | `{}` | `"   "` |
+| 29 | Placeholder surrounded by newlines | `"Hi\n${name}\nBye"` | `{ name: "Ada" }` | `"Hi\nAda\nBye"` |
+| 30 | Multiline template | `"Line1: ${a}\nLine2: ${b}"` | `{ a: "X", b: "Y" }` | `"Line1: X\nLine2: Y"` |
  
 ## What this kata practices
  
