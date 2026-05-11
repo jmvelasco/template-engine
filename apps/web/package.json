@@ -1,0 +1,11 @@
+{
+  "name": "@template-engine/web",
+  "version": "1.0.0",
+  "description": "Template Engine Web",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Not configured yet'",
+    "build": "echo 'Not configured yet'",
+    "test": "echo 'No tests yet'"
+  }
+}
