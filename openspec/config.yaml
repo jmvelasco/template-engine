@@ -10,15 +10,16 @@ context: |
     Web: React 19, TypeScript 5, Vite 7
     Testing: Jest (backend), Vitest (web)
     Project guidelines (source of truth): All artifact creation and implementation must read and follow the guidelines described in ./github
-    - ./.github/copilot-instructions.md - Respository structure, core practices for all artifacts
-    - ./.github/skills/backend-hexagonal - apps/backend/src/domain, application, infrastructure)
-    - ./.github/skills/frontend-patterns - Architectural and design patterns for frontend development
-    - ./.github/skills/react-best-practices - apps/web/src
-    - ./.github/skills/vercel-composition-patterns -  apps/web/src
+    - ./.github/copilot-instructions.md - Core practices for all artifacts
     - ./.github/instructions/conding-standards - All artifacts
     - ./.github/instructions/testing-standards - Testing strategy and patterns
     - ./.github/instructions/tdd - TDD 5-step cycle, TPP, inside-out
-    - ./.github/instructions/commit-strategy - Commit message format
+    - ./.github/instructions/commit-strategy - Commit message format    
+    - ./.github/skills/backend-hexagonal - Architectural patterns for backend development (apps/backend/src)
+    - ./.github/skills/frontend-patterns - Architectural and design patterns for frontend development (apps/web/src)
+    - ./.github/skills/react-best-practices - Best practices for frontend development (apps/web/src)
+    - ./.github/skills/vercel-composition-patterns - Composition patterns for frontend development (apps/web/src)
+    
 rules:
   proposal:
     - Keep proposal concise, focused on the "why"
@@ -28,10 +29,11 @@ rules:
     - Include acceptance criteria for each scenario
     - Include edge cases and error scenarios
   design:
-    - Follow hexagonal architecture layers
+    - Follow hexagonal architecture layers as described in the project context
+    - Use TDD for all implementation tasks
   tasks:
     - "Notice the user which skill, rule, or instruction is being applied in each task. Add an emoji to make it more visual and easy to understand."
     - "Tasks with behavior use TDD: REASON -> RED -> GREEN -> REFACTOR -> RE-EVALUATE"
     - "Order inside-out: domain -> application -> infrastructure"
     - "Run `npm run format:fix` on all code changes"
-    - "Before marking a task group as done, run `npx tsc --noEmit` in the affected workspace to catch broken imports and type errors. Do NOT run it after every TDD cycle — only once at the end of each task group."
+    - "Run `npm run validate` after finish each task to check compilation, linting, and tests"
