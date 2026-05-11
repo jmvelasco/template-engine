@@ -1,25 +1,25 @@
 schema: spec-driven
 
-# Project context (github)
-
 context: |
     Tech stack: TypeScript, React, Node.js
-    Monorepo with npm workspaces: backend, web
     Architecture: hexagonal architecture
+    Monorepo with npm workspaces: backend, web
     Layers: domain -> application -> infrastructure
     Web: React 19, TypeScript 5, Vite 7
     Testing: Jest (backend), Vitest (web)
-    Project guidelines (source of truth): All artifact creation and implementation must read and follow the guidelines described in ./github
+    Project guidelines (source of truth): All artifact creation and implementation must read and follow the guidelines described in ./.github
     - ./.github/copilot-instructions.md - Core practices for all artifacts
-    - ./.github/instructions/conding-standards - All artifacts
-    - ./.github/instructions/testing-standards - Testing strategy and patterns
-    - ./.github/instructions/tdd - TDD 5-step cycle, TPP, inside-out
-    - ./.github/instructions/commit-strategy - Commit message format    
+    - ./.github/instructions/coding-standards.instructions.md - Naming, function design, and code style conventions
+    - ./.github/instructions/tdd-workflow.instructions.md - TDD 5-step cycle with Transformation Priority Premise
+    - ./.github/instructions/commit-strategy.instructions.md - Commit message format and strategy
+    - ./.github/instructions/testing-standards.instructions.md - Testing strategy, patterns, and conventions
+    - ./.github/instructions/xp-methodology.instructions.md - XP methodology and Transformation Priority Premise
+    - ./.github/instructions/react-optimization.instructions.md - React performance optimization patterns
     - ./.github/skills/backend-hexagonal - Architectural patterns for backend development (apps/backend/src)
     - ./.github/skills/frontend-patterns - Architectural and design patterns for frontend development (apps/web/src)
     - ./.github/skills/react-best-practices - Best practices for frontend development (apps/web/src)
     - ./.github/skills/vercel-composition-patterns - Composition patterns for frontend development (apps/web/src)
-    
+
 rules:
   proposal:
     - Keep proposal concise, focused on the "why"
@@ -37,3 +37,4 @@ rules:
     - "Order inside-out: domain -> application -> infrastructure"
     - "Run `npm run format:fix` on all code changes"
     - "Run `npm run validate` after finish each task to check compilation, linting, and tests"
+    - "Before marking a task group as done, run `npx tsc --noEmit` in the affected workspace to catch broken imports and type errors."
