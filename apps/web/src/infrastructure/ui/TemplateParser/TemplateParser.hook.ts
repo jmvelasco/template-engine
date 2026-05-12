@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { ParseTemplateUseCase } from "../../../application/use-cases/parse-template.use-case";
 import { ParseEvent } from "../../../domain/models/parse-event";
-
-export interface VariableRow {
-  id: string;
-  key: string;
-  value: string;
-}
+import { VariableRow } from "../../../domain/models/variable-row";
 
 export interface TemplateParserState {
   template: string;
@@ -43,13 +38,11 @@ const initialState: TemplateParserState = {
   error: null,
 };
 
-export function useApp(
+export function useTemplateParser(
   useCase: ParseTemplateUseCase,
 ): TemplateParserHook {
-  // Single useState with Grouped State
   const [state, setState] = useState<TemplateParserState>(initialState);
 
-  // Behavior actions (no useCallback/useMemo)
   const setTemplate = (value: string) => {
     setState((prev) => ({ ...prev, template: value }));
   };
@@ -87,7 +80,6 @@ export function useApp(
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      // Build variables dictionary from row entries
       const variables: Record<string, string | null> = {};
       for (const row of state.variableRows) {
         if (row.key.trim() !== "") {
@@ -95,7 +87,6 @@ export function useApp(
         }
       }
 
-      // Execute use case
       const result = await useCase.execute(state.template, variables);
 
       setState((prev) => ({
@@ -117,7 +108,6 @@ export function useApp(
     }
   };
 
-  // Encapsulated state and behavior
   return {
     template: state.template,
     variableRows: state.variableRows,

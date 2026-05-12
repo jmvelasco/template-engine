@@ -1,5 +1,5 @@
-import styles from "./App.module.css";
-import { useApp } from "./App.hook";
+import styles from "./TemplateParser.module.css";
+import { useTemplateParser } from "./TemplateParser.hook";
 import { ParseTemplateUseCase } from "../../../application/use-cases/parse-template.use-case";
 import { WebFactory } from "../../factory/web-factory";
 import { TemplateHeader } from "../TemplateHeader/TemplateHeader";
@@ -11,9 +11,9 @@ interface Props {
 }
 
 // Presentational Component (Testable - receives dependencies via props)
-export function App(props: Props) {
+export function TemplateParser(props: Props) {
   // Always consume hook using hook.property pattern (never destructure)
-  const parser = useApp(props.useCase);
+  const parser = useTemplateParser(props.useCase);
 
   return (
     <div className={styles.container}>
@@ -31,7 +31,7 @@ export function App(props: Props) {
 }
 
 // Container Component (Wiring - instantiated at application boundary/routes)
-export function AppContainer() {
+export function TemplateParserContainer() {
   const useCase = WebFactory.createParseTemplateUseCase();
-  return <App useCase={useCase} />;
+  return <TemplateParser useCase={useCase} />;
 }
