@@ -143,6 +143,7 @@
 }
 
 .outputLabel {
+  composes: label;
   margin-bottom: 0.5rem;
 }
 
@@ -241,6 +242,7 @@
 }
 
 .inputMono {
+  composes: input;
   font-family: var(--font-mono);
   font-size: 0.85rem;
 }
@@ -431,12 +433,14 @@
 }
 
 .logSuccess {
+  composes: logItem;
   background: var(--success-glow);
   border-color: rgba(16, 185, 129, 0.15);
   color: var(--success-text);
 }
 
 .logWarning {
+  composes: logItem;
   background: var(--warning-glow);
   border-color: rgba(245, 158, 11, 0.15);
   color: var(--warning-text);
