@@ -10,7 +10,9 @@ describe("The Notification", () => {
   });
 
   test("creates a warning notification with a message", () => {
-    const notification = Notification.warning("Variable 'extra' not found in template");
+    const notification = Notification.warning(
+      "Variable 'extra' not found in template",
+    );
 
     expect(notification.type).toBe("warning");
     expect(notification.message).toBe("Variable 'extra' not found in template");

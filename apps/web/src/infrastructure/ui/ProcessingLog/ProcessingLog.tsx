@@ -25,10 +25,7 @@ export function ProcessingLog(props: Props) {
       <label className={styles.label}>Processing Log</label>
       <ul className={styles.list}>
         {props.notifications.map((notification, index) => (
-          <li
-            className={notificationStyles[notification.type]}
-            key={index}
-          >
+          <li className={notificationStyles[notification.type]} key={index}>
             <span className={dotStyles[notification.type]} />
             {notification.message}
           </li>

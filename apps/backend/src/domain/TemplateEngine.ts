@@ -13,7 +13,10 @@ export class TemplateEngine {
     }
 
     const escapedPlaceholders = this.findEscapedPlaceholders(template);
-    const workingTemplate = this.replaceEscapedWithTokens(template, escapedPlaceholders);
+    const workingTemplate = this.replaceEscapedWithTokens(
+      template,
+      escapedPlaceholders,
+    );
     const foundPlaceholders = this.findPlaceholders(workingTemplate);
 
     const notifications = [
@@ -26,7 +29,10 @@ export class TemplateEngine {
     const { text: replacedText, notifications: replacementNotifications } =
       this.replacePlaceholders(workingTemplate, foundPlaceholders, variables);
 
-    const resultText = this.restoreEscapedPlaceholders(replacedText, escapedPlaceholders);
+    const resultText = this.restoreEscapedPlaceholders(
+      replacedText,
+      escapedPlaceholders,
+    );
     const escapedNotifications = escapedPlaceholders.map((name) =>
       Notification.info(`Escaped placeholder preserved as literal: ${name}`),
     );
@@ -48,7 +54,10 @@ export class TemplateEngine {
     return results;
   }
 
-  private static replaceEscapedWithTokens(template: string, escapedPlaceholders: string[]): string {
+  private static replaceEscapedWithTokens(
+    template: string,
+    escapedPlaceholders: string[],
+  ): string {
     const token = "\0ESCAPED_";
     return escapedPlaceholders.reduce(
       (text, name) => text.replaceAll(`\\$\{${name}}`, `${token}${name}\0`),
@@ -56,7 +65,10 @@ export class TemplateEngine {
     );
   }
 
-  private static restoreEscapedPlaceholders(text: string, escapedPlaceholders: string[]): string {
+  private static restoreEscapedPlaceholders(
+    text: string,
+    escapedPlaceholders: string[],
+  ): string {
     const token = "\0ESCAPED_";
     return escapedPlaceholders.reduce(
       (result, name) => result.replaceAll(`${token}${name}\0`, `\${${name}}`),
@@ -74,7 +86,9 @@ export class TemplateEngine {
     return results;
   }
 
-  private static checkNoPlaceholders(foundPlaceholders: Set<string>): Notification[] {
+  private static checkNoPlaceholders(
+    foundPlaceholders: Set<string>,
+  ): Notification[] {
     if (foundPlaceholders.size === 0) {
       return [Notification.info("No placeholders found in template")];
     }
@@ -96,7 +110,9 @@ export class TemplateEngine {
   ): Notification[] {
     return [...foundPlaceholders]
       .filter((placeholder) => !(placeholder in variables))
-      .map((placeholder) => Notification.warning(`Unresolved placeholder: ${placeholder}`));
+      .map((placeholder) =>
+        Notification.warning(`Unresolved placeholder: ${placeholder}`),
+      );
   }
 
   private static checkNullPlaceholders(
@@ -104,8 +120,13 @@ export class TemplateEngine {
     variables: Record<string, string | null>,
   ): Notification[] {
     return [...foundPlaceholders]
-      .filter((placeholder) => placeholder in variables && variables[placeholder] === null)
-      .map((placeholder) => Notification.warning(`Null value for placeholder: ${placeholder}`));
+      .filter(
+        (placeholder) =>
+          placeholder in variables && variables[placeholder] === null,
+      )
+      .map((placeholder) =>
+        Notification.warning(`Null value for placeholder: ${placeholder}`),
+      );
   }
 
   private static replacePlaceholders(
@@ -115,16 +136,21 @@ export class TemplateEngine {
   ): { text: string; notifications: Notification[] } {
     const placeholderSyntaxPattern = /\$\{.+\}/;
     const resolvedPlaceholders = [...foundPlaceholders].filter(
-      (placeholder) => placeholder in variables && variables[placeholder] !== null,
+      (placeholder) =>
+        placeholder in variables && variables[placeholder] !== null,
     );
 
     const notifications: Notification[] = [];
     const text = resolvedPlaceholders.reduce((result, placeholder) => {
       const value = variables[placeholder]!;
-      notifications.push(Notification.success(`Replaced placeholder: ${placeholder}`));
+      notifications.push(
+        Notification.success(`Replaced placeholder: ${placeholder}`),
+      );
       if (placeholderSyntaxPattern.test(value)) {
         notifications.push(
-          Notification.warning(`Value for '${placeholder}' contains placeholder-like syntax and was inserted as literal`),
+          Notification.warning(
+            `Value for '${placeholder}' contains placeholder-like syntax and was inserted as literal`,
+          ),
         );
       }
       return result.replaceAll(`\${${placeholder}}`, value);

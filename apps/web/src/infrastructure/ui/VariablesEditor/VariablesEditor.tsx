@@ -45,11 +45,7 @@ export function VariablesEditor(props: Props) {
           </div>
         ))}
       </div>
-      <button
-        className={styles.addButton}
-        type="button"
-        onClick={props.onAdd}
-      >
+      <button className={styles.addButton} type="button" onClick={props.onAdd}>
         + Add variable
       </button>
     </div>

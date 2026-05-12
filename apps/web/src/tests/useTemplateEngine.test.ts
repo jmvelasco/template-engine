@@ -18,7 +18,11 @@ function createFailingPort(errorMessage: string): TemplateEnginePort {
 
 describe("The useTemplateEngine hook", () => {
   test("starts with empty template and no variables", () => {
-    const port = createFakePort({ text: "", status: "success", notifications: [] });
+    const port = createFakePort({
+      text: "",
+      status: "success",
+      notifications: [],
+    });
 
     const { result } = renderHook(() => useTemplateEngine(port));
 
@@ -30,7 +34,11 @@ describe("The useTemplateEngine hook", () => {
   });
 
   test("updates template text", () => {
-    const port = createFakePort({ text: "", status: "success", notifications: [] });
+    const port = createFakePort({
+      text: "",
+      status: "success",
+      notifications: [],
+    });
     const { result } = renderHook(() => useTemplateEngine(port));
 
     act(() => {
@@ -41,7 +49,11 @@ describe("The useTemplateEngine hook", () => {
   });
 
   test("adds a variable row", () => {
-    const port = createFakePort({ text: "", status: "success", notifications: [] });
+    const port = createFakePort({
+      text: "",
+      status: "success",
+      notifications: [],
+    });
     const { result } = renderHook(() => useTemplateEngine(port));
 
     act(() => {
@@ -52,7 +64,11 @@ describe("The useTemplateEngine hook", () => {
   });
 
   test("removes a variable by index", () => {
-    const port = createFakePort({ text: "", status: "success", notifications: [] });
+    const port = createFakePort({
+      text: "",
+      status: "success",
+      notifications: [],
+    });
     const { result } = renderHook(() => useTemplateEngine(port));
 
     act(() => {
@@ -67,7 +83,11 @@ describe("The useTemplateEngine hook", () => {
   });
 
   test("updates a variable key", () => {
-    const port = createFakePort({ text: "", status: "success", notifications: [] });
+    const port = createFakePort({
+      text: "",
+      status: "success",
+      notifications: [],
+    });
     const { result } = renderHook(() => useTemplateEngine(port));
 
     act(() => {
@@ -81,7 +101,11 @@ describe("The useTemplateEngine hook", () => {
   });
 
   test("updates a variable value", () => {
-    const port = createFakePort({ text: "", status: "success", notifications: [] });
+    const port = createFakePort({
+      text: "",
+      status: "success",
+      notifications: [],
+    });
     const { result } = renderHook(() => useTemplateEngine(port));
 
     act(() => {
@@ -98,7 +122,9 @@ describe("The useTemplateEngine hook", () => {
     const expectedResponse: ParseResponse = {
       text: "Hello, Alice!",
       status: "success",
-      notifications: [{ type: "success", message: "Replaced placeholder: name" }],
+      notifications: [
+        { type: "success", message: "Replaced placeholder: name" },
+      ],
     };
     const port = createFakePort(expectedResponse);
     const { result } = renderHook(() => useTemplateEngine(port));
@@ -119,7 +145,9 @@ describe("The useTemplateEngine hook", () => {
     expect(result.current.result).toEqual(expectedResponse);
     expect(result.current.loading).toBe(false);
     expect(result.current.error).toBeNull();
-    expect(port.parse).toHaveBeenCalledWith("Hello, ${name}!", { name: "Alice" });
+    expect(port.parse).toHaveBeenCalledWith("Hello, ${name}!", {
+      name: "Alice",
+    });
   });
 
   test("sets error on parse failure", async () => {

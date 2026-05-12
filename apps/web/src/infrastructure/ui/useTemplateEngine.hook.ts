@@ -47,18 +47,24 @@ export function useTemplateEngine(port: TemplateEnginePort) {
   const updateVariableKey = (index: number, key: string) => {
     setState((prev) => ({
       ...prev,
-      variables: prev.variables.map((v, i) => (i === index ? { ...v, key } : v)),
+      variables: prev.variables.map((v, i) =>
+        i === index ? { ...v, key } : v,
+      ),
     }));
   };
 
   const updateVariableValue = (index: number, value: string) => {
     setState((prev) => ({
       ...prev,
-      variables: prev.variables.map((v, i) => (i === index ? { ...v, value } : v)),
+      variables: prev.variables.map((v, i) =>
+        i === index ? { ...v, value } : v,
+      ),
     }));
   };
 
-  const buildVariablesRecord = (variables: VariableRow[]): Record<string, string> => {
+  const buildVariablesRecord = (
+    variables: VariableRow[],
+  ): Record<string, string> => {
     return variables.reduce<Record<string, string>>((acc, row) => {
       if (row.key.trim() !== "") {
         acc[row.key] = row.value;
@@ -75,7 +81,12 @@ export function useTemplateEngine(port: TemplateEnginePort) {
       setState((prev) => ({ ...prev, result, loading: false }));
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
-      setState((prev) => ({ ...prev, error: message, loading: false, result: null }));
+      setState((prev) => ({
+        ...prev,
+        error: message,
+        loading: false,
+        result: null,
+      }));
     }
   };
 

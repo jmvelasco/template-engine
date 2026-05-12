@@ -17,6 +17,7 @@
     "test": "npm run test --workspaces",
     "test:watch": "npm run test:watch --workspaces",
     "test:coverage": "npm run test:coverage --workspaces",
+    "format": "prettier --write .",
     "validate": "npm run lint && npm run test"
   },
   "author": "Softwarecrafters.io",
