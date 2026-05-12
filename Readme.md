@@ -1,145 +1,133 @@
-# Kata Template Engine
+# Template Engine
 
 ## Description
 
-A **template engine** is a tool that takes a text template containing named placeholders and a set of key-value pairs, and produces a new string where every placeholder has been replaced by its corresponding value.
+A **template engine** that takes a text template containing named placeholders (`${key}`) and a set of key-value pairs, and produces a new string where every placeholder has been replaced by its corresponding value. Returns structured results with notifications about each operation (replacements, warnings, errors).
 
-## Goal
+## Architecture
 
-Implement a `render` function that receives a template string and a variables map, and returns the rendered output.
+Fullstack monorepo with hexagonal architecture:
 
 ```
-render("Hello, ${name}!", { name: "Ada" })
-// → "Hello, Ada!"
+template-engine/
+├── packages/
+│   └── api-types/              # Shared TypeScript types (ParseRequest, ParseResponse, etc.)
+├── apps/
+│   ├── backend/                # Express 5 REST API (domain → application → infrastructure)
+│   │   └── src/
+│   │       ├── domain/         # TemplateEngine, Notification, Notifier, ParseResult
+│   │       ├── application/    # ParseTemplateUseCase
+│   │       └── infrastructure/ # ExpressServer, ParseTemplateController
+│   └── web/                    # React 19 + Vite UI
+│       └── src/
+│           ├── domain/         # TemplateEngine interface (port)
+│           └── infrastructure/ # HttpTemplateEngine adapter, factory, UI components
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 22
+- npm >= 10
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Run the application
+
+Start the backend (port 3000):
+
+```bash
+npm start --workspace=apps/backend
+```
+
+Start the frontend dev server (port 5173, proxies `/parse` to backend):
+
+```bash
+npm run dev --workspace=apps/web
+```
+
+Open `http://localhost:5173` in your browser.
+
+### API Usage
+
+```bash
+curl -X POST http://localhost:3000/parse \
+  -H "Content-Type: application/json" \
+  -d '{"template": "Hello, ${name}!", "variables": {"name": "Ada"}}'
+```
+
+Response:
+
+```json
+{
+  "text": "Hello, Ada!",
+  "status": "success",
+  "notifications": [
+    { "type": "success", "message": "Replaced placeholder: name" }
+  ]
+}
 ```
 
 ## Rules
 
 - Placeholders follow the pattern `${variable_name}`
-- If a variable in the template has no matching key in the map, it should be left as-is (or throw an error — your choice, document it)
-- If a variable appears multiple times, all occurrences must be replaced
-- The template may contain no placeholders at all — return it unchanged
+- If a variable in the template has no matching key in the map, it is left as-is with a warning notification
+- If a variable appears multiple times, all occurrences are replaced (single notification)
+- Escaped placeholders (`\${key}`) are converted to literal `${key}`
+- Null values skip replacement with a warning notification
+- Values containing `${...}` syntax are treated as literal text
+- Malformed placeholders (`${}`, `${ name }`) are left as-is
 
-## Example cases
+## Scripts
 
-### Basic replacement
+### Root (monorepo)
 
-| #   | Scenario                                 | Template                  | Variables                         | Output            |
-| --- | ---------------------------------------- | ------------------------- | --------------------------------- | ----------------- |
-| 1   | Single placeholder                       | `"Hello, ${name}!"`       | `{ name: "Ada" }`                 | `"Hello, Ada!"`   |
-| 2   | Multiple different placeholders          | `"${greeting}, ${name}!"` | `{ greeting: "Hi", name: "Bob" }` | `"Hi, Bob!"`      |
-| 3   | Repeated placeholder replaced everywhere | `"${name} meets ${name}"` | `{ name: "Ada" }`                 | `"Ada meets Ada"` |
-| 4   | Placeholder at start of template         | `"${name} is here"`       | `{ name: "Ada" }`                 | `"Ada is here"`   |
-| 5   | Placeholder at end of template           | `"Hello ${name}"`         | `{ name: "Ada" }`                 | `"Hello Ada"`     |
-| 6   | Template is only a placeholder           | `"${name}"`               | `{ name: "Ada" }`                 | `"Ada"`           |
-| 7   | Adjacent placeholders with no separator  | `"${first}${last}"`       | `{ first: "Ada", last: "L" }`     | `"AdaL"`          |
+```bash
+npm install             # Install all workspace dependencies
+npm test                # Run all tests (backend + frontend)
+npm run lint            # Lint all workspaces
+npm run lint:fix        # Lint and auto-fix
+npm run format          # Format with Prettier
+npm run validate        # Lint + test
+```
 
-### No replacement needed
+### Backend (`apps/backend`)
 
-| #   | Scenario                           | Template          | Variables         | Output            |
-| --- | ---------------------------------- | ----------------- | ----------------- | ----------------- |
-| 8   | No placeholders in template        | `"Hello, world!"` | `{}`              | `"Hello, world!"` |
-| 9   | No placeholders, variables ignored | `"Hello, world!"` | `{ name: "Ada" }` | `"Hello, world!"` |
-| 10  | Empty template, no variables       | `""`              | `{}`              | `""`              |
-| 11  | Empty template, variables ignored  | `""`              | `{ name: "Ada" }` | `""`              |
+```bash
+npm start --workspace=apps/backend              # Start Express server (port 3000)
+npm test --workspace=apps/backend               # Run Jest tests
+npm run test:watch --workspace=apps/backend     # Watch mode
+npm run test:coverage --workspace=apps/backend  # Coverage report
+npm run compile --workspace=apps/backend        # Type-check
+```
 
-### Missing variables
+### Frontend (`apps/web`)
 
-| #   | Scenario                                     | Template              | Variables         | Output              |
-| --- | -------------------------------------------- | --------------------- | ----------------- | ------------------- |
-| 12  | Placeholder with no matching variable        | `"Hello, ${name}!"`   | `{}`              | `"Hello, ${name}!"` |
-| 13  | Extra variables with no matching placeholder | `"Hello!"`            | `{ name: "Ada" }` | `"Hello!"`          |
-| 14  | Partial match — some found, some missing     | `"${name} is ${age}"` | `{ name: "Ada" }` | `"Ada is ${age}"`   |
-| 15  | Multiple missing in complex template         | `"${a} ${b} ${c}"`    | `{ b: "ok" }`     | `"${a} ok ${c}"`    |
+```bash
+npm run dev --workspace=apps/web                # Vite dev server (port 5173)
+npm test --workspace=apps/web                   # Run Vitest tests
+npm run test:watch --workspace=apps/web         # Watch mode
+npm run build --workspace=apps/web              # Production build
+npm run preview --workspace=apps/web            # Preview production build
+```
 
-### Special variable values
+## Tech Stack
 
-| #   | Scenario                               | Template            | Variables                  | Output                   |
-| --- | -------------------------------------- | ------------------- | -------------------------- | ------------------------ |
-| 16  | Empty string as value                  | `"Hello, ${name}!"` | `{ name: "" }`             | `"Hello, !"`             |
-| 17  | Value with spaces                      | `"Hello, ${name}!"` | `{ name: "Ada Lovelace" }` | `"Hello, Ada Lovelace!"` |
-| 18  | Value with special characters          | `"Say ${msg}"`      | `{ msg: "x < y & z > w" }` | `"Say x < y & z > w"`    |
-| 19  | Value contains placeholder-like syntax | `"Hello, ${name}!"` | `{ name: "${other}" }`     | `"Hello, ${other}!"`     |
-| 20  | Null value prevents replacement        | `"Hello, ${name}!"` | `{ name: null }`           | `"Hello, ${name}!"`      |
-| 21  | Numeric value                          | `"Age: ${age}"`     | `{ age: "30" }`            | `"Age: 30"`              |
-
-### Malformed or tricky placeholders
-
-| #   | Scenario                                   | Template              | Variables         | Output                |
-| --- | ------------------------------------------ | --------------------- | ----------------- | --------------------- |
-| 22  | Unclosed placeholder — not a valid pattern | `"Hello, ${name"`     | `{ name: "Ada" }` | `"Hello, ${name"`     |
-| 23  | Missing dollar sign — not a valid pattern  | `"Hello, {name}!"`    | `{ name: "Ada" }` | `"Hello, {name}!"`    |
-| 24  | Empty placeholder name `${}`               | `"Hello, ${}!"`       | `{}`              | `"Hello, ${}!"`       |
-| 25  | Nested braces — not supported              | `"${${key}}"`         | `{ key: "name" }` | `"${${key}}"`         |
-| 26  | Extra closing brace                        | `"Hello, ${name}}!"`  | `{ name: "Ada" }` | `"Hello, Ada}!"`      |
-| 27  | Placeholder with spaces in name            | `"Hello, ${ name }!"` | `{ name: "Ada" }` | `"Hello, ${ name }!"` |
-
-### Whitespace and formatting
-
-| #   | Scenario                           | Template                     | Variables            | Output                 |
-| --- | ---------------------------------- | ---------------------------- | -------------------- | ---------------------- |
-| 28  | Template is only whitespace        | `"   "`                      | `{}`                 | `"   "`                |
-| 29  | Placeholder surrounded by newlines | `"Hi\n${name}\nBye"`         | `{ name: "Ada" }`    | `"Hi\nAda\nBye"`       |
-| 30  | Multiline template                 | `"Line1: ${a}\nLine2: ${b}"` | `{ a: "X", b: "Y" }` | `"Line1: X\nLine2: Y"` |
+| Layer    | Technology                          |
+| -------- | ----------------------------------- |
+| Backend  | TypeScript, Express 5, Jest, ts-jest |
+| Frontend | TypeScript, React 19, Vite, Vitest  |
+| Shared   | `@template-engine/api-types`        |
 
 ## What this kata practices
 
-- String manipulation
-- Regular expressions
-- Edge case handling
-- Test-driven development (TDD)
-
-## 📋 Available Scripts
-
-The scaffolder of this project is based on a template from [Software Crafters](https://softwarecrafters.io/).
-
-### Development
-
-```bash
-npm run dev              # Watch mode for TypeScript compilation
-npm run compile          # Type-check without emitting files
-npm run compile:watch    # Type-check in watch mode
-```
-
-### Building
-
-```bash
-npm run build           # Clean and compile TypeScript to JavaScript
-npm run clean           # Remove lib/ and coverage/ directories
-```
-
-### Linting & Formatting
-
-```bash
-npm run lint            # Run ESLint
-npm run lint:fix        # Run ESLint and auto-fix issues
-npm run format          # Check formatting with Prettier
-npm run format:check    # Verify code formatting
-npm run format:fix      # Format code with Prettier
-npm run analyze         # Run lint:fix + compile
-```
-
-### Testing
-
-```bash
-npm test                # Run tests with Jest
-npm run test:watch      # Run tests in watch mode
-npm run test:coverage   # Run tests with coverage report
-npm run test:ci         # Run tests in CI mode with coverage
-```
-
-### Quality Assurance
-
-```bash
-npm run validate        # Run compile + lint + test (full check)
-```
-
-## ⚙️ Husky & lint-staged
-
-- **pre-commit**:
-  - Runs ESLint and Prettier on staged TypeScript files (via lint-staged)
-  - Runs TypeScript type-checking on the entire project (compile)
-  - Blocks commit if there are type errors or unfixable linting issues
-- **pre-push**:
-  - Runs full validation (compile + lint + test)
-  - Ensures all code is properly typed, linted, and tested before pushing
+- Hexagonal architecture (ports and adapters)
+- Test-driven development (TDD) with Transformation Priority Premise
+- String manipulation and regular expressions
+- Monorepo with npm workspaces
+- Fullstack TypeScript
