@@ -54,4 +54,13 @@ describe("The TemplateEngine", () => {
       { type: "warning", message: "Unresolved placeholder: name" },
     ]);
   });
+
+  test("replaces a single placeholder with its matching value", () => {
+    const result = TemplateEngine.parse("Hello, ${name}!", { name: "Alice" });
+
+    expect(result.text).toBe("Hello, Alice!");
+    expect(result.notifications).toEqual([
+      { type: "success", message: "Replaced placeholder: name" },
+    ]);
+  });
 });
