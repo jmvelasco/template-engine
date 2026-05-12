@@ -1,0 +1,13 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "private": true,
+  "main": "lib/index.js",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "npm run clean && tsc -b",
+    "clean": "rm -rf lib coverage",
+    "compile": "tsc --noEmit",
+    "test": "jest --verbose"
+  }
+}
