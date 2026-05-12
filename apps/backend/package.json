@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "dev": "tsc --watch",
+    "start": "node lib/infrastructure/entrypoints/api/server.js",
     "build": "npm run clean && tsc -b",
     "clean": "rm -rf lib coverage",
     "compile": "tsc --noEmit",
