@@ -12,9 +12,13 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "@template-engine/api-types": "*"
+    "@template-engine/api-types": "*",
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
     "@types/jest": "30.0.0",
     "@types/node": "24.10.1",
     "jest": "30.2.0",
