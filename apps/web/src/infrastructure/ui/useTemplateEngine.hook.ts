@@ -23,15 +23,61 @@ const initialState: TemplateEngineState = {
   error: null,
 };
 
-export function useTemplateEngine(_port: TemplateEnginePort) {
+export function useTemplateEngine(port: TemplateEnginePort) {
   const [state, setState] = useState<TemplateEngineState>(initialState);
 
-  const updateTemplate = (_template: string) => {};
-  const addVariable = () => {};
-  const removeVariable = (_index: number) => {};
-  const updateVariableKey = (_index: number, _key: string) => {};
-  const updateVariableValue = (_index: number, _value: string) => {};
-  const parse = async () => {};
+  const updateTemplate = (template: string) => {
+    setState((prev) => ({ ...prev, template }));
+  };
+
+  const addVariable = () => {
+    setState((prev) => ({
+      ...prev,
+      variables: [...prev.variables, { key: "", value: "" }],
+    }));
+  };
+
+  const removeVariable = (index: number) => {
+    setState((prev) => ({
+      ...prev,
+      variables: prev.variables.filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateVariableKey = (index: number, key: string) => {
+    setState((prev) => ({
+      ...prev,
+      variables: prev.variables.map((v, i) => (i === index ? { ...v, key } : v)),
+    }));
+  };
+
+  const updateVariableValue = (index: number, value: string) => {
+    setState((prev) => ({
+      ...prev,
+      variables: prev.variables.map((v, i) => (i === index ? { ...v, value } : v)),
+    }));
+  };
+
+  const buildVariablesRecord = (variables: VariableRow[]): Record<string, string> => {
+    return variables.reduce<Record<string, string>>((acc, row) => {
+      if (row.key.trim() !== "") {
+        acc[row.key] = row.value;
+      }
+      return acc;
+    }, {});
+  };
+
+  const parse = async () => {
+    setState((prev) => ({ ...prev, loading: true, error: null }));
+    try {
+      const variablesRecord = buildVariablesRecord(state.variables);
+      const result = await port.parse(state.template, variablesRecord);
+      setState((prev) => ({ ...prev, result, loading: false }));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      setState((prev) => ({ ...prev, error: message, loading: false, result: null }));
+    }
+  };
 
   return {
     template: state.template,
