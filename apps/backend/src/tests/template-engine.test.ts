@@ -10,82 +10,114 @@ class SpyParseNotifier implements ParseNotifier {
   }
 }
 
-describe("The parse function", () => {
-  describe("returns template unchanged when there are no replacements", () => {
-    test.each([
-      ["no placeholders", "Hello, world!", {}, "Hello, world!"],
-      ["no variables provided", "Hello, ${name}!", {}, "Hello, ${name}!"],
-      [
-        "variables provided but no placeholders match",
-        "Hello, ${name}!",
-        { age: "21" },
-        "Hello, ${name}!",
-      ],
-      ["template is empty", "", {}, ""],
-      ["template is empty with variables", "", { name: "John" }, ""],
-    ])(
-      "should return the same template if %s",
-      (_, template, variables, expected) => {
-        const parsedText = parse(template, variables);
-        expect(parsedText).toBe(expected);
-      },
-    );
-  });
+describe("The Template Parser", () => {
+  describe("when there are no replacements", () => {
+    test("considers a template with no placeholders at all", () => {
+      const template = "Hello, world!";
+      const variables = {};
 
-  describe("replaces placeholders successfully", () => {
-    test.each([
-      [
-        "single placeholder",
-        "Hello, ${name}!",
-        { name: "John" },
-        "Hello, John!",
-      ],
-      [
-        "all occurrences of the same placeholder",
-        "Hello, ${name}! Welcome, ${name}!",
-        { name: "John" },
-        "Hello, John! Welcome, John!",
-      ],
-      [
-        "multiple different placeholders",
-        "Here it is ${name}!, he is ${age} years old.",
-        { name: "John", age: "21" },
-        "Here it is John!, he is 21 years old.",
-      ],
-      [
-        "complex template with multiple placeholders",
-        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
-        { name: "John", age: "21", sisterAge: "25" },
-        "Here it is John!, he is 21 years old and the sister of John is 25.",
-      ],
-    ])("should replace %s", (_, template, variables, expected) => {
-      const parsedText = parse(template, variables);
-      expect(parsedText).toBe(expected);
+      const result = parse(template, variables);
+
+      expect(result).toBe("Hello, world!");
+    });
+
+    test("considers a template with placeholders when no variables are provided", () => {
+      const template = "Hello, ${name}!";
+      const variables = {};
+
+      const result = parse(template, variables);
+
+      expect(result).toBe("Hello, ${name}!");
+    });
+
+    test("considers a template with placeholders when variables are provided but none match", () => {
+      const template = "Hello, ${name}!";
+      const variables = { age: "21" };
+
+      const result = parse(template, variables);
+
+      expect(result).toBe("Hello, ${name}!");
+    });
+
+    test("considers an empty template when no variables are provided", () => {
+      const template = "";
+      const variables = {};
+
+      const result = parse(template, variables);
+
+      expect(result).toBe("");
+    });
+
+    test("considers an empty template when some variables are provided", () => {
+      const template = "";
+      const variables = { name: "John" };
+
+      const result = parse(template, variables);
+
+      expect(result).toBe("");
     });
   });
 
-  describe("handles partial replacements correctly", () => {
-    test.each([
-      [
-        "matching placeholders replaced, no matching placeholder left as is",
-        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
-        { name: "John", sisterAge: "25" },
-        "Here it is John!, he is ${age} years old and the sister of John is 25.",
-      ],
-      [
-        "null placeholder value prevents replacement",
-        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
-        { name: null, sisterAge: "25" },
-        "Here it is ${name}!, he is ${age} years old and the sister of ${name} is 25.",
-      ],
-    ])("should %s", (_, template, variables, expected) => {
-      const parsedText = parse(template, variables);
-      expect(parsedText).toBe(expected);
+  describe("when replacing placeholders", () => {
+    test("replaces a single placeholder with its dictionary value", () => {
+      const template = "Hello, ${name}!";
+      const variables = { name: "John" };
+
+      const result = parse(template, variables);
+
+      expect(result).toBe("Hello, John!");
+    });
+
+    test("replaces all occurrences of the same placeholder in the template", () => {
+      const template = "Hello, ${name}! Welcome, ${name}!";
+      const variables = { name: "John" };
+
+      const result = parse(template, variables);
+
+      expect(result).toBe("Hello, John! Welcome, John!");
+    });
+
+    test("replaces multiple different placeholders", () => {
+      const template = "Here it is ${name}!, he is ${age} years old.";
+      const variables = { name: "John", age: "21" };
+
+      const result = parse(template, variables);
+
+      expect(result).toBe("Here it is John!, he is 21 years old.");
+    });
+
+    test("replaces placeholders in a complex template with multiple variables", () => {
+      const template = "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.";
+      const variables = { name: "John", age: "21", sisterAge: "25" };
+
+      const result = parse(template, variables);
+
+      expect(result).toBe("Here it is John!, he is 21 years old and the sister of John is 25.");
     });
   });
 
-  describe("notifies parse events using ParseNotifier", () => {
-    test("should notify a success event when a replacement is done", () => {
+  describe("when handling partial replacements", () => {
+    test("replaces matching placeholders while leaving unmatched placeholders intact", () => {
+      const template = "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.";
+      const variables = { name: "John", sisterAge: "25" };
+
+      const result = parse(template, variables);
+
+      expect(result).toBe("Here it is John!, he is ${age} years old and the sister of John is 25.");
+    });
+
+    test("does not replace a placeholder whose value is explicitly null", () => {
+      const template = "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.";
+      const variables = { name: null, sisterAge: "25" };
+
+      const result = parse(template, variables);
+
+      expect(result).toBe("Here it is ${name}!, he is ${age} years old and the sister of ${name} is 25.");
+    });
+  });
+
+  describe("when notifying parse events using ParseNotifier", () => {
+    test("emits a success event when a placeholder is replaced", () => {
       const notifier = new SpyParseNotifier();
       const template = "Hello, ${name}!";
       const variables = { name: "Ada" };
@@ -101,7 +133,7 @@ describe("The parse function", () => {
       ]);
     });
 
-    test("should notify a warning event when a placeholder variable is null", () => {
+    test("emits a warning event when a placeholder variable is null", () => {
       const notifier = new SpyParseNotifier();
       const template = "Hello, ${name}!";
       const variables = { name: null };
@@ -117,7 +149,7 @@ describe("The parse function", () => {
       ]);
     });
 
-    test("should notify a warning event when a variable is not used in the template", () => {
+    test("emits a warning event when a variable in the dictionary is not found in the template", () => {
       const notifier = new SpyParseNotifier();
       const template = "Hello!";
       const variables = { age: "21" };
@@ -128,13 +160,12 @@ describe("The parse function", () => {
       expect(notifier.events).toEqual([
         {
           type: "WARNING",
-          message:
-            "No replacements done! key ${age} not found in the template.",
+          message: "No replacements done! key ${age} not found in the template.",
         },
       ]);
     });
 
-    test("should accumulate success and warning events across multiple variables", () => {
+    test("accumulates success and warning events across multiple variables", () => {
       const notifier = new SpyParseNotifier();
       const template = "Dear ${name}, your code is ${quality}.";
       const variables = { name: "Alice", quality: "clean", unusedVar: "foo" };
@@ -153,13 +184,12 @@ describe("The parse function", () => {
         },
         {
           type: "WARNING",
-          message:
-            "No replacements done! key ${unusedVar} not found in the template.",
+          message: "No replacements done! key ${unusedVar} not found in the template.",
         },
       ]);
     });
 
-    test("should notify a warning event when a placeholder is not defined in the dictionary", () => {
+    test("notifies a warning when a placeholder in the template is missing from the dictionary", () => {
       const notifier = new SpyParseNotifier();
       const template = "Hello, ${name}!";
       const variables = {};
@@ -175,7 +205,7 @@ describe("The parse function", () => {
       ]);
     });
 
-    test("should notify warning events for each unique undefined placeholder in the template", () => {
+    test("notifies distinct warnings for each unique undefined placeholder in the template", () => {
       const notifier = new SpyParseNotifier();
       const template = "Hello, ${name}! You are ${age} years old.";
       const variables = {};
@@ -195,7 +225,7 @@ describe("The parse function", () => {
       ]);
     });
 
-    test("should notify only once when duplicate undefined placeholders exist in the template", () => {
+    test("notifies only once when duplicate undefined placeholders exist in the template", () => {
       const notifier = new SpyParseNotifier();
       const template = "Hello, ${name}! Welcome, ${name}!";
       const variables = {};
@@ -211,7 +241,7 @@ describe("The parse function", () => {
       ]);
     });
 
-    test("should handle mixture of defined and undefined placeholders correctly", () => {
+    test("handles a mixture of defined replacements and undefined placeholder warnings seamlessly", () => {
       const notifier = new SpyParseNotifier();
       const template = "Hello, ${name}! You are ${age} years old.";
       const variables = { name: "Alice" };
