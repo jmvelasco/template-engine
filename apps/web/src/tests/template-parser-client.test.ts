@@ -1,8 +1,5 @@
 import { test, expect, describe } from "vitest";
-import {
-  TemplateParserClient,
-  ParseResponse,
-} from "../infrastructure/api/template-parser-client";
+import { TemplateParserClient } from "../infrastructure/api/template-parser-client";
 
 describe("The TemplateParserClient", () => {
   test("sends a POST request to /api/parse with template and variables", async () => {
@@ -21,7 +18,10 @@ describe("The TemplateParserClient", () => {
       } as any;
     };
 
-    const client = new TemplateParserClient("http://localhost:3001", fakeFetch);
+    const client = new TemplateParserClient(
+      "http://localhost:3001",
+      fakeFetch as any,
+    );
     const result = await client.parse("Hello, ${name}!", { name: "Ada" });
 
     expect(calledUrl).toBe("http://localhost:3001/api/parse");
@@ -47,7 +47,10 @@ describe("The TemplateParserClient", () => {
       } as any;
     };
 
-    const client = new TemplateParserClient("http://localhost:3001", fakeFetch);
+    const client = new TemplateParserClient(
+      "http://localhost:3001",
+      fakeFetch as any,
+    );
 
     await expect(
       client.parse("Hello, ${name}!", { name: null }),
@@ -59,7 +62,10 @@ describe("The TemplateParserClient", () => {
       throw new Error("Network connection failure.");
     };
 
-    const client = new TemplateParserClient("http://localhost:3001", fakeFetch);
+    const client = new TemplateParserClient(
+      "http://localhost:3001",
+      fakeFetch as any,
+    );
 
     await expect(
       client.parse("Hello, ${name}!", { name: "Ada" }),
