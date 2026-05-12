@@ -1,16 +1,16 @@
 import { describe, test, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useTemplateEngine } from "../infrastructure/ui/useTemplateEngine.hook";
-import type { TemplateEnginePort } from "../domain/TemplateEnginePort";
+import type { TemplateEngine } from "../domain/TemplateEngine";
 import type { ParseResponse } from "@template-engine/api-types";
 
-function createFakePort(response: ParseResponse): TemplateEnginePort {
+function createFakePort(response: ParseResponse): TemplateEngine {
   return {
     parse: vi.fn().mockResolvedValue(response),
   };
 }
 
-function createFailingPort(errorMessage: string): TemplateEnginePort {
+function createFailingPort(errorMessage: string): TemplateEngine {
   return {
     parse: vi.fn().mockRejectedValue(new Error(errorMessage)),
   };

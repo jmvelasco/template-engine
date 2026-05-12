@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ParseResponse } from "@template-engine/api-types";
-import type { TemplateEnginePort } from "../../domain/TemplateEnginePort";
+import type { TemplateEngine } from "../../domain/TemplateEngine";
 
 interface VariableRow {
   key: string;
@@ -23,7 +23,7 @@ const initialState: TemplateEngineState = {
   error: null,
 };
 
-export function useTemplateEngine(port: TemplateEnginePort) {
+export function useTemplateEngine(port: TemplateEngine) {
   const [state, setState] = useState<TemplateEngineState>(initialState);
 
   const updateTemplate = (template: string) => {

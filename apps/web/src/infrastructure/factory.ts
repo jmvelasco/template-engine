@@ -1,6 +1,6 @@
 import { HttpTemplateEngine } from "./HttpTemplateEngine";
-import type { TemplateEnginePort } from "../domain/TemplateEnginePort";
+import type { TemplateEngine } from "../domain/TemplateEngine";
 
-export function createTemplateEngine(): TemplateEnginePort {
+export function createTemplateEngine(): TemplateEngine {
   return new HttpTemplateEngine("");
 }

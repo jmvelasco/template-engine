@@ -1,6 +1,6 @@
 import type { ParseResponse } from "@template-engine/api-types";
 
-export interface TemplateEnginePort {
+export interface TemplateEngine {
   parse(
     template: string,
     variables: Record<string, string | null>,

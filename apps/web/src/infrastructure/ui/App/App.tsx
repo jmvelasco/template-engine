@@ -1,4 +1,4 @@
-import type { TemplateEnginePort } from "../../../domain/TemplateEnginePort";
+import type { TemplateEngine } from "../../../domain/TemplateEngine";
 import { useTemplateEngine } from "../useTemplateEngine.hook";
 import { TemplateInput } from "../TemplateInput/TemplateInput";
 import { VariablesEditor } from "../VariablesEditor/VariablesEditor";
@@ -8,7 +8,7 @@ import { ProcessingLog } from "../ProcessingLog/ProcessingLog";
 import styles from "./App.module.css";
 
 interface Props {
-  templateEngine: TemplateEnginePort;
+  templateEngine: TemplateEngine;
 }
 
 export function App(props: Props) {

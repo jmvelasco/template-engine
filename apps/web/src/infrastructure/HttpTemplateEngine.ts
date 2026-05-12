@@ -1,7 +1,7 @@
 import type { ParseResponse } from "@template-engine/api-types";
-import type { TemplateEnginePort } from "../domain/TemplateEnginePort";
+import type { TemplateEngine } from "../domain/TemplateEngine";
 
-export class HttpTemplateEngine implements TemplateEnginePort {
+export class HttpTemplateEngine implements TemplateEngine {
   constructor(private readonly baseUrl: string) {}
 
   async parse(
