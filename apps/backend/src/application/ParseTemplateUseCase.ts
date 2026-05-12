@@ -1,10 +1,11 @@
 import { ParseResult } from "../domain/ParseResult";
+import { TemplateEngine } from "../domain/TemplateEngine";
 
 export class ParseTemplateUseCase {
   execute(
-    _template: string,
-    _variables: Record<string, string | null>,
+    template: string,
+    variables: Record<string, string | null>,
   ): ParseResult {
-    return undefined as unknown as ParseResult;
+    return TemplateEngine.parse(template, variables);
   }
 }
