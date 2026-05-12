@@ -120,4 +120,23 @@ describe("The TemplateEngine", () => {
       { type: "info", message: "Escaped placeholder preserved as literal: name" },
     ]);
   });
+
+  test("treats values containing placeholder syntax as literal text", () => {
+    const result = TemplateEngine.parse("Value is ${x}", { x: "${y}" });
+
+    expect(result.text).toBe("Value is ${y}");
+    expect(result.notifications).toEqual([
+      { type: "success", message: "Replaced placeholder: x" },
+      { type: "warning", message: "Value for 'x' contains placeholder-like syntax and was inserted as literal" },
+    ]);
+  });
+
+  test("ignores malformed placeholders and leaves them as-is", () => {
+    const result = TemplateEngine.parse("Empty ${} and spaced ${ name } remain", {});
+
+    expect(result.text).toBe("Empty ${} and spaced ${ name } remain");
+    expect(result.notifications).toEqual([
+      { type: "info", message: "No placeholders found in template" },
+    ]);
+  });
 });
