@@ -63,8 +63,12 @@ export class TemplateEngine {
       (placeholder) => placeholder in variables && variables[placeholder] !== null,
     );
     resolvedPlaceholders.forEach((placeholder) => {
-      resultText = resultText.replaceAll(`\${${placeholder}}`, variables[placeholder]!);
+      const value = variables[placeholder]!;
+      resultText = resultText.replaceAll(`\${${placeholder}}`, value);
       notifications.push(Notification.success(`Replaced placeholder: ${placeholder}`));
+      if (/\$\{.+\}/.test(value)) {
+        notifications.push(Notification.warning(`Value for '${placeholder}' contains placeholder-like syntax and was inserted as literal`));
+      }
     });
 
     escapedPlaceholders.forEach((name) => {
