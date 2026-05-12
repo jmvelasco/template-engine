@@ -1,5 +1,14 @@
 import { test, expect, describe } from "@jest/globals";
 import { parse } from "../domain/template-engine";
+import { ParseNotifier, ParseEvent } from "../domain/ports/parse-notifier";
+
+class SpyParseNotifier implements ParseNotifier {
+  public readonly events: ParseEvent[] = [];
+
+  notify(event: ParseEvent): void {
+    this.events.push(event);
+  }
+}
 
 describe("The parse function", () => {
   describe("returns template unchanged when there are no replacements", () => {
@@ -72,6 +81,80 @@ describe("The parse function", () => {
     ])("should %s", (_, template, variables, expected) => {
       const parsedText = parse(template, variables);
       expect(parsedText).toBe(expected);
+    });
+  });
+
+  describe("notifies parse events using ParseNotifier", () => {
+    test("should notify a success event when a replacement is done", () => {
+      const notifier = new SpyParseNotifier();
+      const template = "Hello, ${name}!";
+      const variables = { name: "Ada" };
+
+      const result = parse(template, variables, notifier);
+
+      expect(result).toBe("Hello, Ada!");
+      expect(notifier.events).toEqual([
+        {
+          type: "SUCCESS",
+          message: "Replaced ${name} with 'Ada'",
+        },
+      ]);
+    });
+
+    test("should notify a warning event when a placeholder variable is null", () => {
+      const notifier = new SpyParseNotifier();
+      const template = "Hello, ${name}!";
+      const variables = { name: null };
+
+      const result = parse(template, variables, notifier);
+
+      expect(result).toBe("Hello, ${name}!");
+      expect(notifier.events).toEqual([
+        {
+          type: "WARNING",
+          message: "No replacements done! key ${name} has no value.",
+        },
+      ]);
+    });
+
+    test("should notify a warning event when a variable is not used in the template", () => {
+      const notifier = new SpyParseNotifier();
+      const template = "Hello!";
+      const variables = { age: "21" };
+
+      const result = parse(template, variables, notifier);
+
+      expect(result).toBe("Hello!");
+      expect(notifier.events).toEqual([
+        {
+          type: "WARNING",
+          message: "No replacements done! key ${age} not found in the template.",
+        },
+      ]);
+    });
+
+    test("should accumulate success and warning events across multiple variables", () => {
+      const notifier = new SpyParseNotifier();
+      const template = "Dear ${name}, your code is ${quality}.";
+      const variables = { name: "Alice", quality: "clean", unusedVar: "foo" };
+
+      const result = parse(template, variables, notifier);
+
+      expect(result).toBe("Dear Alice, your code is clean.");
+      expect(notifier.events).toEqual([
+        {
+          type: "SUCCESS",
+          message: "Replaced ${name} with 'Alice'",
+        },
+        {
+          type: "SUCCESS",
+          message: "Replaced ${quality} with 'clean'",
+        },
+        {
+          type: "WARNING",
+          message: "No replacements done! key ${unusedVar} not found in the template.",
+        },
+      ]);
     });
   });
 });
