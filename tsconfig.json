@@ -30,12 +30,6 @@
   },
   "files": [],
   "include": [],
-  "exclude": [
-    "node_modules",
-    "coverage"
-  ],
-  "references": [
-    { "path": "./apps/backend" },
-    { "path": "./apps/web" }
-  ]
+  "exclude": ["node_modules", "coverage"],
+  "references": [{ "path": "./apps/backend" }, { "path": "./apps/web" }]
 }

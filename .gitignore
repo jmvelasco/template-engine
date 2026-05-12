@@ -1,1 +1,4 @@
 node_modules
+.agents
+openspec/config.yaml
+AGENTS.md
