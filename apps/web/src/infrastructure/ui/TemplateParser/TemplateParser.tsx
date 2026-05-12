@@ -1,7 +1,7 @@
 import styles from "./TemplateParser.module.css";
 import { useTemplateParser } from "./TemplateParser.hook";
 import { ParseTemplateUseCase } from "../../../application/use-cases/parse-template.use-case";
-import { WebFactory } from "../../factory/web-factory";
+import { TemplateParserWebFactory } from "../../factory/template-parser-web-factory";
 import { TemplateHeader } from "../TemplateHeader/TemplateHeader";
 import { EditorConfiguration } from "../EditorConfiguration/EditorConfiguration";
 import { CompileOutput } from "../CompileOutput/CompileOutput";
@@ -32,6 +32,6 @@ export function TemplateParser(props: Props) {
 
 // Container Component (Wiring - instantiated at application boundary/routes)
 export function TemplateParserContainer() {
-  const useCase = WebFactory.createParseTemplateUseCase();
+  const useCase = TemplateParserWebFactory.createParseTemplateUseCase();
   return <TemplateParser useCase={useCase} />;
 }

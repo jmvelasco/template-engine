@@ -1,7 +1,7 @@
 import { ParseTemplateUseCase } from "../../application/use-cases/parse-template.use-case";
 import { HttpTemplateParserAdapter } from "../adapters/http-template-parser.adapter";
 
-export class WebFactory {
+export class TemplateParserWebFactory {
   private static parseTemplateUseCaseInstance: ParseTemplateUseCase | null = null;
 
   public static createParseTemplateUseCase(
