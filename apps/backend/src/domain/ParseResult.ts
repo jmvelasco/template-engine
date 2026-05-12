@@ -12,6 +12,13 @@ export class ParseResult {
   }
 
   status(): ParseStatus {
-    return undefined as unknown as ParseStatus;
+    const hasSuccess = this.notifications.some((n) => n.type === "success");
+    const hasWarningOrError = this.notifications.some(
+      (n) => n.type === "warning" || n.type === "error",
+    );
+
+    if (hasSuccess && hasWarningOrError) return "partial";
+    if (hasSuccess) return "success";
+    return "warning";
   }
 }
