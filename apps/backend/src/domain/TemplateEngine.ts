@@ -12,10 +12,22 @@ export class TemplateEngine {
       ]);
     }
 
+    const escapedPattern = /\\\$\{(\w+)\}/g;
+    const escapedPlaceholders: string[] = [];
+    let escapedMatch;
+    while ((escapedMatch = escapedPattern.exec(template)) !== null) {
+      escapedPlaceholders.push(escapedMatch[1]);
+    }
+    let workingTemplate = template;
+    const escapePlaceholder = "\0ESCAPED_";
+    escapedPlaceholders.forEach((name) => {
+      workingTemplate = workingTemplate.replaceAll(`\\$\{${name}}`, `${escapePlaceholder}${name}\0`);
+    });
+
     const placeholderPattern = /\$\{(\w+)\}/g;
     const foundPlaceholders = new Set<string>();
     let match;
-    while ((match = placeholderPattern.exec(template)) !== null) {
+    while ((match = placeholderPattern.exec(workingTemplate)) !== null) {
       foundPlaceholders.add(match[1]);
     }
 
@@ -46,13 +58,18 @@ export class TemplateEngine {
       notifications.push(Notification.warning(`Null value for placeholder: ${placeholder}`));
     });
 
-    let resultText = template;
+    let resultText = workingTemplate;
     const resolvedPlaceholders = [...foundPlaceholders].filter(
       (placeholder) => placeholder in variables && variables[placeholder] !== null,
     );
     resolvedPlaceholders.forEach((placeholder) => {
       resultText = resultText.replaceAll(`\${${placeholder}}`, variables[placeholder]!);
       notifications.push(Notification.success(`Replaced placeholder: ${placeholder}`));
+    });
+
+    escapedPlaceholders.forEach((name) => {
+      resultText = resultText.replaceAll(`${escapePlaceholder}${name}\0`, `\${${name}}`);
+      notifications.push(Notification.info(`Escaped placeholder preserved as literal: ${name}`));
     });
 
     return ParseResult.create(resultText, notifications);
