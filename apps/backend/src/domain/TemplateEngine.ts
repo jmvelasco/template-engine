@@ -39,6 +39,15 @@ export class TemplateEngine {
       notifications.push(Notification.warning(`Unresolved placeholder: ${placeholder}`));
     });
 
-    return ParseResult.create(template, notifications);
+    let resultText = template;
+    const resolvedPlaceholders = [...foundPlaceholders].filter(
+      (placeholder) => placeholder in variables && variables[placeholder] !== null,
+    );
+    resolvedPlaceholders.forEach((placeholder) => {
+      resultText = resultText.replaceAll(`\${${placeholder}}`, variables[placeholder]!);
+      notifications.push(Notification.success(`Replaced placeholder: ${placeholder}`));
+    });
+
+    return ParseResult.create(resultText, notifications);
   }
 }
