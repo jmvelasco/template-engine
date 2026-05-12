@@ -32,6 +32,13 @@ export class TemplateEngine {
       notifications.push(Notification.warning(`Unused variable: ${key}`));
     });
 
+    const unresolvedPlaceholders = [...foundPlaceholders].filter(
+      (placeholder) => !(placeholder in variables),
+    );
+    unresolvedPlaceholders.forEach((placeholder) => {
+      notifications.push(Notification.warning(`Unresolved placeholder: ${placeholder}`));
+    });
+
     return ParseResult.create(template, notifications);
   }
 }
