@@ -7,6 +7,7 @@ The codebase follows hexagonal architecture (backend-hexagonal skill), frontend-
 ## Goals / Non-Goals
 
 **Goals:**
+
 - Restructure the backend following hexagonal architecture: domain (TemplateEngine, ParseResult, Notification, Notifier), application (ParseTemplateUseCase), infrastructure (Express server, controller)
 - Replace stdout logging with Notifier pattern that returns structured notifications as part of the result
 - Expose a REST API endpoint `POST /parse`
@@ -15,6 +16,7 @@ The codebase follows hexagonal architecture (backend-hexagonal skill), frontend-
 - Dark theme only, minimalista design with UX patterns
 
 **Non-Goals:**
+
 - Template persistence, history, or user accounts
 - Light mode or theme switching
 - Recursive resolution of placeholders in values
@@ -28,6 +30,7 @@ The codebase follows hexagonal architecture (backend-hexagonal skill), frontend-
 **Decision**: Replace `logger(message)` → `process.stdout.write` with an immutable Notifier that accumulates `Notification` objects and returns them as part of `ParseResult`.
 
 **Alternatives considered**:
+
 - Event emitter pattern: Over-engineered for this use case, adds async complexity
 - Callback injection: Couples the caller to notification handling
 
@@ -38,6 +41,7 @@ The codebase follows hexagonal architecture (backend-hexagonal skill), frontend-
 **Decision**: `parse()` returns `ParseResult { text, notifications[] }` with a derived `status()` method that computes the overall status from the notification types.
 
 **Status derivation logic**:
+
 - All notifications are `success` → `"success"`
 - Mix of `success` + `warning`/`error` → `"partial"`
 - Only `warning`/`info`, no `success` → `"warning"`
@@ -50,6 +54,7 @@ The codebase follows hexagonal architecture (backend-hexagonal skill), frontend-
 **Decision**: Use Express as the HTTP framework.
 
 **Alternatives considered**:
+
 - Hono: More modern but less ecosystem support and the user chose Express
 - Fastify: Heavier setup for a single endpoint
 
@@ -58,6 +63,7 @@ The codebase follows hexagonal architecture (backend-hexagonal skill), frontend-
 ### 4. Backend Hexagonal Layer Structure
 
 **Decision**:
+
 ```
 apps/backend/src/
 ├── domain/           # TemplateEngine, ParseResult, Notification, Notifier
@@ -82,6 +88,7 @@ packages/api-types/
 ```
 
 **Alternatives considered**:
+
 - Duplicate types in each app's domain: Risks silent divergence; a typo in one side doesn't break compilation
 - Shared `contract` package: Too generic a name; invites non-type content
 - Shared `types` package: Catch-all name, doesn't specify types of what
@@ -89,6 +96,7 @@ packages/api-types/
 **Rationale**: `api-types` is concrete — it says exactly what it contains (API types) and acts as a naming barrier against putting logic in it. The monorepo already uses npm workspaces, so adding a workspace is near zero cost. Both apps import the same types, so a contract change in one place produces compilation errors in both — single source of truth.
 
 **What goes in api-types**:
+
 - `NotificationType` (literal union: success | warning | error | info)
 - `ParseStatus` (literal union: success | partial | warning)
 - `Notification` (interface: type + message)
@@ -96,6 +104,7 @@ packages/api-types/
 - `ParseResponse` (interface: text + status + notifications)
 
 **What does NOT go in api-types**:
+
 - `Notifier` (backend domain behavior)
 - `ParseResult` class with `status()` method (backend domain, rich object)
 - `TemplateEnginePort` (frontend domain port)
@@ -104,6 +113,7 @@ packages/api-types/
 ### 6. Frontend Hexagonal Structure
 
 **Decision**:
+
 ```
 apps/web/src/
 ├── domain/                    # TemplateEnginePort (interface), re-exports from api-types
@@ -141,6 +151,7 @@ apps/web/src/
 ### 9. Placeholder Validation Rules
 
 **Decision**:
+
 - Valid placeholder: `${key}` where key contains one or more non-whitespace characters
 - Escaped placeholder: `\${key}` → preserved as literal `${key}`, backslash removed
 - Malformed: `${}`, `${ }`, `${ name }` → not recognized as placeholders, left as-is
