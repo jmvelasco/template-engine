@@ -110,4 +110,13 @@ describe("The TemplateEngine", () => {
 
     expect(variables).toEqual(originalVariables);
   });
+
+  test("converts escaped placeholder to literal text", () => {
+    const result = TemplateEngine.parse("Use \\${name} as placeholder syntax", {});
+
+    expect(result.text).toBe("Use ${name} as placeholder syntax");
+    expect(result.notifications).toEqual([
+      { type: "info", message: "Escaped placeholder preserved as literal: name" },
+    ]);
+  });
 });
