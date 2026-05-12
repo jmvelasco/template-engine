@@ -159,12 +159,6 @@ describe("The parse function", () => {
       ]);
     });
 
-    // TODO:
-    // [ ] 1. Template has a single undefined placeholder
-    // [ ] 2. Template has multiple different undefined placeholders
-    // [ ] 3. Template has duplicate undefined placeholders
-    // [ ] 4. Template has mixture of defined and undefined placeholders
-
     test("should notify a warning event when a placeholder is not defined in the dictionary", () => {
       const notifier = new SpyParseNotifier();
       const template = "Hello, ${name}!";
@@ -177,6 +171,62 @@ describe("The parse function", () => {
         {
           type: "WARNING",
           message: "No replacements done! placeholder ${name} is not defined in the dictionary.",
+        },
+      ]);
+    });
+
+    test("should notify warning events for each unique undefined placeholder in the template", () => {
+      const notifier = new SpyParseNotifier();
+      const template = "Hello, ${name}! You are ${age} years old.";
+      const variables = {};
+
+      const result = parse(template, variables, notifier);
+
+      expect(result).toBe("Hello, ${name}! You are ${age} years old.");
+      expect(notifier.events).toEqual([
+        {
+          type: "WARNING",
+          message: "No replacements done! placeholder ${name} is not defined in the dictionary.",
+        },
+        {
+          type: "WARNING",
+          message: "No replacements done! placeholder ${age} is not defined in the dictionary.",
+        },
+      ]);
+    });
+
+    test("should notify only once when duplicate undefined placeholders exist in the template", () => {
+      const notifier = new SpyParseNotifier();
+      const template = "Hello, ${name}! Welcome, ${name}!";
+      const variables = {};
+
+      const result = parse(template, variables, notifier);
+
+      expect(result).toBe("Hello, ${name}! Welcome, ${name}!");
+      expect(notifier.events).toEqual([
+        {
+          type: "WARNING",
+          message: "No replacements done! placeholder ${name} is not defined in the dictionary.",
+        },
+      ]);
+    });
+
+    test("should handle mixture of defined and undefined placeholders correctly", () => {
+      const notifier = new SpyParseNotifier();
+      const template = "Hello, ${name}! You are ${age} years old.";
+      const variables = { name: "Alice" };
+
+      const result = parse(template, variables, notifier);
+
+      expect(result).toBe("Hello, Alice! You are ${age} years old.");
+      expect(notifier.events).toEqual([
+        {
+          type: "WARNING",
+          message: "No replacements done! placeholder ${age} is not defined in the dictionary.",
+        },
+        {
+          type: "SUCCESS",
+          message: "Replaced ${name} with 'Alice'",
         },
       ]);
     });
