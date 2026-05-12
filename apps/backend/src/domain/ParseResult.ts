@@ -1,4 +1,5 @@
 import { Notification } from "./Notification";
+import type { ParseStatus } from "@template-engine/api-types";
 
 export class ParseResult {
   private constructor(
@@ -8,5 +9,9 @@ export class ParseResult {
 
   static create(text: string, notifications: Notification[]): ParseResult {
     return new ParseResult(text, notifications);
+  }
+
+  status(): ParseStatus {
+    return undefined as unknown as ParseStatus;
   }
 }
