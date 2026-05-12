@@ -43,7 +43,7 @@ const initialState: TemplateParserState = {
   error: null,
 };
 
-export function useTemplateParser(
+export function useApp(
   useCase: ParseTemplateUseCase,
 ): TemplateParserHook {
   // Single useState with Grouped State

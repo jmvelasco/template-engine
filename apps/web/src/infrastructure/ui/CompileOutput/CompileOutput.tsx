@@ -1,5 +1,5 @@
 import styles from "./CompileOutput.module.css";
-import { TemplateParserHook } from "../App/useTemplateParser";
+import { TemplateParserHook } from "../App/App.hook";
 
 interface Props {
   parser: TemplateParserHook;
