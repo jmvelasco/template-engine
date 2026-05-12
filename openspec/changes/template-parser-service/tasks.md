@@ -20,7 +20,7 @@
 
 ## 4. Frontend API Client and Custom Hook
 
-- [ ] 4.1 Implement `TemplateParserClient` in `apps/web/src/infrastructure/api/template-parser-client.ts` to communicate with POST `/api/parse` backend. 🏛️ Notice: Applying Frontend Patterns API Store layer.
+- [x] 4.1 Implement `TemplateParserClient` in `apps/web/src/infrastructure/api/template-parser-client.ts` to communicate with POST `/api/parse` backend. 🏛️ Notice: Applying Frontend Patterns API Store layer.
 - [ ] 4.2 Create the custom hook `useTemplateParser` inside `apps/web/src/infrastructure/ui/App/useTemplateParser.ts` managing editor inputs, dictionary state, loading, and logs. 🧪 Notice: Applying TDD in React Custom Hooks with Vitest.
 - [ ] 4.3 Run `npx tsc --noEmit` in the frontend workspace to verify import correctness. 🧹 Notice: Quality Validation step.
 
