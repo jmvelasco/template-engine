@@ -6,8 +6,6 @@
     "moduleResolution": "NodeNext",
     "isolatedModules": true,
     "jsx": "react",
-    "outDir": "./lib",
-    "rootDir": "./src",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -30,10 +28,14 @@
     "declarationMap": true,
     "types": ["node", "jest"]
   },
-  "include": ["src/**/*"],
+  "files": [],
+  "include": [],
   "exclude": [
     "node_modules",
-    "lib",
     "coverage"
+  ],
+  "references": [
+    { "path": "./apps/backend" },
+    { "path": "./apps/web" }
   ]
 }
