@@ -4,26 +4,26 @@ export class Notifier {
   private constructor(private readonly items: Notification[]) {}
 
   static create(): Notifier {
-    return undefined as unknown as Notifier;
+    return new Notifier([]);
   }
 
-  addSuccess(_message: string): Notifier {
-    return undefined as unknown as Notifier;
+  addSuccess(message: string): Notifier {
+    return new Notifier([...this.items, Notification.success(message)]);
   }
 
-  addWarning(_message: string): Notifier {
-    return undefined as unknown as Notifier;
+  addWarning(message: string): Notifier {
+    return new Notifier([...this.items, Notification.warning(message)]);
   }
 
-  addError(_message: string): Notifier {
-    return undefined as unknown as Notifier;
+  addError(message: string): Notifier {
+    return new Notifier([...this.items, Notification.error(message)]);
   }
 
-  addInfo(_message: string): Notifier {
-    return undefined as unknown as Notifier;
+  addInfo(message: string): Notifier {
+    return new Notifier([...this.items, Notification.info(message)]);
   }
 
   notifications(): Notification[] {
-    return [];
+    return [...this.items];
   }
 }
