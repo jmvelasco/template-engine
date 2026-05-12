@@ -101,4 +101,13 @@ describe("The TemplateEngine", () => {
       { type: "warning", message: "Null value for placeholder: name" },
     ]);
   });
+
+  test("does not mutate the input dictionary", () => {
+    const variables = { name: "Alice" };
+    const originalVariables = { ...variables };
+
+    TemplateEngine.parse("Hello, ${name}!", variables);
+
+    expect(variables).toEqual(originalVariables);
+  });
 });
