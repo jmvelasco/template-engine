@@ -4,7 +4,7 @@ import { Notification } from "./Notification";
 export class TemplateEngine {
   static parse(
     template: string,
-    _variables: Record<string, string | null>,
+    variables: Record<string, string | null>,
   ): ParseResult {
     if (template === "") {
       return ParseResult.create(template, [
@@ -12,8 +12,26 @@ export class TemplateEngine {
       ]);
     }
 
-    return ParseResult.create(template, [
-      Notification.info("No placeholders found in template"),
-    ]);
+    const placeholderPattern = /\$\{(\w+)\}/g;
+    const foundPlaceholders = new Set<string>();
+    let match;
+    while ((match = placeholderPattern.exec(template)) !== null) {
+      foundPlaceholders.add(match[1]);
+    }
+
+    const notifications: Notification[] = [];
+
+    if (foundPlaceholders.size === 0) {
+      notifications.push(Notification.info("No placeholders found in template"));
+    }
+
+    const unusedKeys = Object.keys(variables).filter(
+      (key) => !foundPlaceholders.has(key),
+    );
+    unusedKeys.forEach((key) => {
+      notifications.push(Notification.warning(`Unused variable: ${key}`));
+    });
+
+    return ParseResult.create(template, notifications);
   }
 }
