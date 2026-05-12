@@ -23,7 +23,7 @@ const initialState: TemplateEngineState = {
   error: null,
 };
 
-export function useTemplateEngine(port: TemplateEngine) {
+export function useTemplateEngine(templateEngine: TemplateEngine) {
   const [state, setState] = useState<TemplateEngineState>(initialState);
 
   const updateTemplate = (template: string) => {
@@ -77,7 +77,10 @@ export function useTemplateEngine(port: TemplateEngine) {
     setState((prev) => ({ ...prev, loading: true, error: null }));
     try {
       const variablesRecord = buildVariablesRecord(state.variables);
-      const result = await port.parse(state.template, variablesRecord);
+      const result = await templateEngine.parse(
+        state.template,
+        variablesRecord,
+      );
       setState((prev) => ({ ...prev, result, loading: false }));
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
