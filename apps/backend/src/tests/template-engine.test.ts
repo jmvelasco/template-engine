@@ -1,11 +1,7 @@
 import { test, expect, describe } from "@jest/globals";
-import { render } from "../domain/template-engine";
+import { parse } from "../domain/template-engine";
 
-describe("The render function", () => {
-  const loggerSpy = jest
-    .spyOn(process.stdout, "write")
-    .mockImplementation(() => true);
-
+describe("The parse function", () => {
   describe("returns template unchanged when there are no replacements", () => {
     test.each([
       ["no placeholders", "Hello, world!", {}, "Hello, world!"],
@@ -21,7 +17,7 @@ describe("The render function", () => {
     ])(
       "should return the same template if %s",
       (_, template, variables, expected) => {
-        const parsedText = render(template, variables);
+        const parsedText = parse(template, variables);
         expect(parsedText).toBe(expected);
       },
     );
@@ -54,7 +50,7 @@ describe("The render function", () => {
         "Here it is John!, he is 21 years old and the sister of John is 25.",
       ],
     ])("should replace %s", (_, template, variables, expected) => {
-      const parsedText = render(template, variables);
+      const parsedText = parse(template, variables);
       expect(parsedText).toBe(expected);
     });
   });
@@ -74,32 +70,8 @@ describe("The render function", () => {
         "Here it is ${name}!, he is ${age} years old and the sister of ${name} is 25.",
       ],
     ])("should %s", (_, template, variables, expected) => {
-      const parsedText = render(template, variables);
+      const parsedText = parse(template, variables);
       expect(parsedText).toBe(expected);
     });
-  });
-
-  test("should log a message when no replacements are done", () => {
-    const parsedText = render(
-      "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.",
-      {
-        foo: null,
-        bar: "25",
-        baz: "30",
-      },
-    );
-    const expected =
-      "Here it is ${name}!, he is ${age} years old and the sister of ${name} is ${sisterAge}.";
-
-    expect(loggerSpy).toHaveBeenCalledWith(
-      "No replacements done! key ${foo} has no value.\n",
-    );
-    expect(loggerSpy).toHaveBeenCalledWith(
-      "No replacements done! key ${bar} not found in the template.\n",
-    );
-    expect(loggerSpy).toHaveBeenCalledWith(
-      "No replacements done! key ${baz} not found in the template.\n",
-    );
-    expect(parsedText).toBe(expected);
   });
 });
