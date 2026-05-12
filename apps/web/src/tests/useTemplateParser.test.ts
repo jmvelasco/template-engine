@@ -1,6 +1,7 @@
 import { test, expect, describe } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useTemplateParser } from "../infrastructure/ui/App/useTemplateParser";
+import { TemplateParserClient } from "../infrastructure/api/template-parser-client";
 
 describe("The useTemplateParser hook", () => {
   test("initializes states with default values", () => {
@@ -57,20 +58,22 @@ describe("The useTemplateParser hook", () => {
 
   test("parses template successfully calling the client", async () => {
     const fakeClient = {
-      parse: async (
-        _template: string,
-        _variables: Record<string, string | null>,
-      ) => {
+      parse: async () => {
         return {
           parsedText: "Hello John!",
           events: [
-            { type: "SUCCESS" as const, message: "Replaced ${name} with 'John'" },
+            {
+              type: "SUCCESS" as const,
+              message: "Replaced ${name} with 'John'",
+            },
           ],
         };
       },
-    } as any;
+    };
 
-    const { result } = renderHook(() => useTemplateParser(fakeClient));
+    const { result } = renderHook(() =>
+      useTemplateParser(fakeClient as unknown as TemplateParserClient),
+    );
 
     // Initially output is empty
     expect(result.current.parsedText).toBe("");
@@ -93,9 +96,11 @@ describe("The useTemplateParser hook", () => {
       parse: async () => {
         throw new Error("Parser service unavailable.");
       },
-    } as any;
+    };
 
-    const { result } = renderHook(() => useTemplateParser(fakeClient));
+    const { result } = renderHook(() =>
+      useTemplateParser(fakeClient as unknown as TemplateParserClient),
+    );
 
     await act(async () => {
       await result.current.parseTemplate();

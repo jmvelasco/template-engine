@@ -4,23 +4,26 @@ import { TemplateParserClient } from "../infrastructure/api/template-parser-clie
 describe("The TemplateParserClient", () => {
   test("sends a POST request to /api/parse with template and variables", async () => {
     let calledUrl = "";
-    let calledOptions: any = {};
+    let calledOptions: RequestInit = {};
 
-    const fakeFetch = async (url: string, options: any) => {
-      calledUrl = url;
-      calledOptions = options;
+    const fakeFetch = async (
+      url: string | URL | Request,
+      options?: RequestInit,
+    ) => {
+      calledUrl = url.toString();
+      calledOptions = options || {};
       return {
         ok: true,
         json: async () => ({
           parsedText: "Hello Ada!",
           events: [{ type: "SUCCESS", message: "Replaced ${name} with 'Ada'" }],
         }),
-      } as any;
+      } as unknown as Response;
     };
 
     const client = new TemplateParserClient(
       "http://localhost:3001",
-      fakeFetch as any,
+      fakeFetch as unknown as typeof fetch,
     );
     const result = await client.parse("Hello, ${name}!", { name: "Ada" });
 
@@ -29,7 +32,7 @@ describe("The TemplateParserClient", () => {
     expect(calledOptions.headers).toEqual({
       "Content-Type": "application/json",
     });
-    expect(JSON.parse(calledOptions.body)).toEqual({
+    expect(JSON.parse(calledOptions.body as string)).toEqual({
       template: "Hello, ${name}!",
       variables: { name: "Ada" },
     });
@@ -44,12 +47,12 @@ describe("The TemplateParserClient", () => {
       return {
         ok: false,
         json: async () => ({ error: "Some server error message." }),
-      } as any;
+      } as unknown as Response;
     };
 
     const client = new TemplateParserClient(
       "http://localhost:3001",
-      fakeFetch as any,
+      fakeFetch as unknown as typeof fetch,
     );
 
     await expect(
@@ -64,7 +67,7 @@ describe("The TemplateParserClient", () => {
 
     const client = new TemplateParserClient(
       "http://localhost:3001",
-      fakeFetch as any,
+      fakeFetch as unknown as typeof fetch,
     );
 
     await expect(

@@ -168,8 +168,8 @@ export function App() {
             <div className={styles.logTimeline}>
               {events.length === 0 ? (
                 <p className={styles.emptyLogs}>
-                  No parse logs recorded yet. Compile a template to see
-                  notified logs.
+                  No parse logs recorded yet. Compile a template to see notified
+                  logs.
                 </p>
               ) : (
                 events.map((event, index) => (
