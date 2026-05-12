@@ -51,11 +51,9 @@ describe("POST /api/parse", () => {
   });
 
   test("returns 400 Bad Request when variables is missing", async () => {
-    const response = await request(app)
-      .post("/api/parse")
-      .send({
-        template: "Hello, ${name}!",
-      });
+    const response = await request(app).post("/api/parse").send({
+      template: "Hello, ${name}!",
+    });
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
@@ -64,12 +62,10 @@ describe("POST /api/parse", () => {
   });
 
   test("returns 400 Bad Request when variables is not an object", async () => {
-    const response = await request(app)
-      .post("/api/parse")
-      .send({
-        template: "Hello, ${name}!",
-        variables: "invalid",
-      });
+    const response = await request(app).post("/api/parse").send({
+      template: "Hello, ${name}!",
+      variables: "invalid",
+    });
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({

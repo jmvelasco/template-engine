@@ -16,7 +16,7 @@
 - [x] 3.1 Install Express, CORS, and their types in the `apps/backend` workspace. 📦 Notice: Applying Dependency management practices.
 - [x] 3.2 Scaffold the Express API server and integrations tests in `apps/backend/src/infrastructure/entrypoints/api/server.ts`. 🏛️ Notice: Applying Hexagonal Entrypoints guidelines.
 - [x] 3.3 Implement `POST /api/parse` controller routing invoking `ParseTemplateUseCase` and handling bad request validation errors. 🧪 Notice: Applying TDD Integration & E2E Testing with Jest.
-- [ ] 3.4 Run `npm run validate` on the backend workspace to ensure format, linting, and tests are clean. 🧹 Notice: Quality Validation step.
+- [x] 3.4 Run `npm run validate` on the backend workspace to ensure format, linting, and tests are clean. 🧹 Notice: Quality Validation step.
 
 ## 4. Frontend API Client and Custom Hook
 

@@ -128,7 +128,8 @@ describe("The parse function", () => {
       expect(notifier.events).toEqual([
         {
           type: "WARNING",
-          message: "No replacements done! key ${age} not found in the template.",
+          message:
+            "No replacements done! key ${age} not found in the template.",
         },
       ]);
     });
@@ -152,7 +153,8 @@ describe("The parse function", () => {
         },
         {
           type: "WARNING",
-          message: "No replacements done! key ${unusedVar} not found in the template.",
+          message:
+            "No replacements done! key ${unusedVar} not found in the template.",
         },
       ]);
     });
