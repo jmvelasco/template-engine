@@ -7,6 +7,18 @@ function parse(
 ): string {
   let parsedTemplate = template;
 
+  const matches = [...template.matchAll(/\$\{([^}]+)\}/g)];
+  const placeholdersInTemplate = new Set(matches.map(m => m[1]));
+
+  for (const placeholderName of placeholdersInTemplate) {
+    if (!(placeholderName in variables)) {
+      notifier?.notify({
+        type: "WARNING",
+        message: `No replacements done! placeholder \${${placeholderName}} is not defined in the dictionary.`,
+      });
+    }
+  }
+
   for (const [key, value] of Object.entries(variables)) {
     const placeholder = `\${${key}}`;
     const existsInTemplate = parsedTemplate.includes(placeholder);
