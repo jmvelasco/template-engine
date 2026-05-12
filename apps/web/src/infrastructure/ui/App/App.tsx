@@ -143,7 +143,7 @@ export function App() {
             </div>
           )}
 
-          <div className={styles.label} style={{ marginBottom: "0.5rem" }}>
+          <div className={`${styles.label} ${styles.outputLabel}`}>
             Parsed Result
           </div>
           <div className={styles.outputArea}>
