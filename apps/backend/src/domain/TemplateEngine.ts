@@ -39,6 +39,13 @@ export class TemplateEngine {
       notifications.push(Notification.warning(`Unresolved placeholder: ${placeholder}`));
     });
 
+    const nullPlaceholders = [...foundPlaceholders].filter(
+      (placeholder) => placeholder in variables && variables[placeholder] === null,
+    );
+    nullPlaceholders.forEach((placeholder) => {
+      notifications.push(Notification.warning(`Null value for placeholder: ${placeholder}`));
+    });
+
     let resultText = template;
     const resolvedPlaceholders = [...foundPlaceholders].filter(
       (placeholder) => placeholder in variables && variables[placeholder] !== null,
