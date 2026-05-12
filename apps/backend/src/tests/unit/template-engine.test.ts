@@ -63,4 +63,42 @@ describe("The TemplateEngine", () => {
       { type: "success", message: "Replaced placeholder: name" },
     ]);
   });
+
+  test("replaces all occurrences of the same placeholder", () => {
+    const result = TemplateEngine.parse("${name} meets ${name}", { name: "Alice" });
+
+    expect(result.text).toBe("Alice meets Alice");
+    expect(result.notifications).toEqual([
+      { type: "success", message: "Replaced placeholder: name" },
+    ]);
+  });
+
+  test("replaces multiple different placeholders", () => {
+    const result = TemplateEngine.parse("${greeting}, ${name}!", { greeting: "Hello", name: "Alice" });
+
+    expect(result.text).toBe("Hello, Alice!");
+    expect(result.notifications).toEqual([
+      { type: "success", message: "Replaced placeholder: greeting" },
+      { type: "success", message: "Replaced placeholder: name" },
+    ]);
+  });
+
+  test("handles partial replacements with mixed resolved and unresolved", () => {
+    const result = TemplateEngine.parse("${greeting}, ${name}!", { greeting: "Hello" });
+
+    expect(result.text).toBe("Hello, ${name}!");
+    expect(result.notifications).toEqual([
+      { type: "warning", message: "Unresolved placeholder: name" },
+      { type: "success", message: "Replaced placeholder: greeting" },
+    ]);
+  });
+
+  test("skips null values and warns", () => {
+    const result = TemplateEngine.parse("Hello, ${name}!", { name: null });
+
+    expect(result.text).toBe("Hello, ${name}!");
+    expect(result.notifications).toEqual([
+      { type: "warning", message: "Null value for placeholder: name" },
+    ]);
+  });
 });
