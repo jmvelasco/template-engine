@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Template Engine Web",
   "private": true,
+  "dependencies": {
+    "@template-engine/api-types": "*"
+  },
   "scripts": {
     "dev": "echo 'Not configured yet'",
     "build": "echo 'Not configured yet'",

@@ -6,6 +6,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "references": [
+    { "path": "packages/api-types" },
     { "path": "apps/backend" },
     { "path": "apps/web" }
   ],

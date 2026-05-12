@@ -4,6 +4,7 @@
   "description": "Template Engine monorepo",
   "private": true,
   "workspaces": [
+    "packages/api-types",
     "apps/backend",
     "apps/web"
   ],

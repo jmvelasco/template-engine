@@ -11,6 +11,9 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },
+  "dependencies": {
+    "@template-engine/api-types": "*"
+  },
   "devDependencies": {
     "@types/jest": "30.0.0",
     "@types/node": "24.10.1",

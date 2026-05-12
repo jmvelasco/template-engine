@@ -31,6 +31,9 @@
     "types": ["node", "jest"]
   },
   "include": ["src/**/*"],
+  "references": [
+    { "path": "../../packages/api-types" }
+  ],
   "exclude": [
     "node_modules",
     "lib",
