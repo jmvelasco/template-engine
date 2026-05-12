@@ -9,7 +9,7 @@
 
 - [x] 2.1 Implement the `InMemoryParseNotifier` adapter in `apps/backend/src/infrastructure/adapters/in-memory-parse-notifier.ts` to accumulate events. 🏛️ Notice: Applying Hexagonal Architecture Infrastructure Layer guidelines.
 - [x] 2.2 Implement the `ParseTemplateUseCase` in `apps/backend/src/application/use-cases/parse-template.use-case.ts` to orchestrate parsing and gather notifier logs. 🧪 Notice: Applying TDD Inside-Out (Use Case layer).
-- [ ] 2.3 Run `npx tsc --noEmit` on backend workspace to verify compilation of new classes. 🧹 Notice: Quality Validation step.
+- [x] 2.3 Run `npx tsc --noEmit` on backend workspace to verify compilation of new classes. 🧹 Notice: Quality Validation step.
 
 ## 3. Infrastructure API REST
 
