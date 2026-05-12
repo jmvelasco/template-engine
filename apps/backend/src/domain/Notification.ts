@@ -6,19 +6,19 @@ export class Notification {
     readonly message: string,
   ) {}
 
-  static success(_message: string): Notification {
-    return undefined as unknown as Notification;
+  static success(message: string): Notification {
+    return new Notification("success", message);
   }
 
-  static warning(_message: string): Notification {
-    return undefined as unknown as Notification;
+  static warning(message: string): Notification {
+    return new Notification("warning", message);
   }
 
-  static error(_message: string): Notification {
-    return undefined as unknown as Notification;
+  static error(message: string): Notification {
+    return new Notification("error", message);
   }
 
-  static info(_message: string): Notification {
-    return undefined as unknown as Notification;
+  static info(message: string): Notification {
+    return new Notification("info", message);
   }
 }
