@@ -1,9 +1,6 @@
-import React from "react";
 import styles from "./App.module.css";
 
-interface AppProps {}
-
-export function App(props: AppProps) {
+export function App() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
