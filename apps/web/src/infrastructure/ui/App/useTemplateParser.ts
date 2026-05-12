@@ -1,8 +1,6 @@
 import { useState } from "react";
-import {
-  TemplateParserClient,
-  ParseEvent,
-} from "../../api/template-parser-client";
+import { ParseTemplateUseCase } from "../../../application/use-cases/parse-template.use-case";
+import { ParseEvent } from "../../../domain/models/parse-event";
 
 export interface VariableRow {
   id: string;
@@ -10,7 +8,7 @@ export interface VariableRow {
   value: string;
 }
 
-interface TemplateParserState {
+export interface TemplateParserState {
   template: string;
   variableRows: VariableRow[];
   parsedText: string;
@@ -19,7 +17,22 @@ interface TemplateParserState {
   error: string | null;
 }
 
-const defaultClient = new TemplateParserClient();
+export interface TemplateParserHook {
+  template: string;
+  variableRows: VariableRow[];
+  parsedText: string;
+  events: ParseEvent[];
+  isLoading: boolean;
+  error: string | null;
+  setTemplate: (value: string) => void;
+  addVariableRow: () => void;
+  updateVariableRow: (
+    id: string,
+    updates: Partial<Omit<VariableRow, "id">>,
+  ) => void;
+  deleteVariableRow: (id: string) => void;
+  parseTemplate: () => Promise<void>;
+}
 
 const initialState: TemplateParserState = {
   template: "Hello, ${name}!",
@@ -31,8 +44,8 @@ const initialState: TemplateParserState = {
 };
 
 export function useTemplateParser(
-  client: TemplateParserClient = defaultClient,
-) {
+  useCase: ParseTemplateUseCase,
+): TemplateParserHook {
   // Single useState with Grouped State
   const [state, setState] = useState<TemplateParserState>(initialState);
 
@@ -82,12 +95,13 @@ export function useTemplateParser(
         }
       }
 
-      const response = await client.parse(state.template, variables);
+      // Execute use case
+      const result = await useCase.execute(state.template, variables);
 
       setState((prev) => ({
         ...prev,
-        parsedText: response.parsedText,
-        events: response.events,
+        parsedText: result.parsedText,
+        events: result.events,
         isLoading: false,
       }));
     } catch (err: unknown) {
@@ -103,7 +117,7 @@ export function useTemplateParser(
     }
   };
 
-  // Encapsulated state and behavior (no raw state or setState exported)
+  // Encapsulated state and behavior
   return {
     template: state.template,
     variableRows: state.variableRows,

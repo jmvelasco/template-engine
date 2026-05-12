@@ -1,0 +1,192 @@
+.glassCard {
+  background: var(--card-bg, rgba(20, 26, 45, 0.45));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: var(--transition-smooth, all 0.25s cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.glassCard:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 12px 40px 0 rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.08),
+    0 0 30px var(--card-glow, rgba(99, 102, 241, 0.05));
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 0.75rem;
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #e5e7eb;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.outputLabel {
+  composes: label;
+  margin-bottom: 0.5rem;
+}
+
+.outputArea {
+  background: rgba(10, 14, 26, 0.6);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  border-radius: 10px;
+  padding: 1.25rem;
+  min-height: 120px;
+  font-family: var(--font-mono, monospace);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #f3f4f6;
+  white-space: pre-wrap;
+  margin-bottom: 2rem;
+  border-left: 4px solid #6366f1;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.placeholderOutput {
+  color: var(--text-secondary, #9ca3af);
+  font-family: var(--font-sans, sans-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+.errorMessage {
+  background: var(--error-glow, rgba(239, 68, 68, 0.15));
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: var(--error-text, #f87171);
+  border-radius: 10px;
+  padding: 1rem;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  animation: shake 0.4s ease;
+}
+
+.logsSection {
+  margin-top: 1rem;
+}
+
+.logsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.badge {
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: #c084fc;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+}
+
+.logTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+/* Scrollbar styling */
+.logTimeline::-webkit-scrollbar {
+  width: 6px;
+}
+.logTimeline::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+}
+.logTimeline::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+.logTimeline::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.logItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  border: 1px solid transparent;
+  animation: slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logSuccess {
+  composes: logItem;
+  background: var(--success-glow, rgba(16, 185, 129, 0.15));
+  border-color: rgba(16, 185, 129, 0.15);
+  color: var(--success-text, #34d399);
+}
+
+.logWarning {
+  composes: logItem;
+  background: var(--warning-glow, rgba(245, 158, 11, 0.15));
+  border-color: rgba(245, 158, 11, 0.15);
+  color: var(--warning-text, #fbbf24);
+}
+
+.logIcon {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.logMessage {
+  flex: 1;
+}
+
+.emptyLogs {
+  font-family: var(--font-sans, sans-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--text-secondary, #9ca3af);
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}

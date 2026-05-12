@@ -1,14 +1,6 @@
-export interface ParseEvent {
-  type: "SUCCESS" | "WARNING";
-  message: string;
-}
+import { TemplateParserPort, ParseResult } from "../../domain/ports/template-parser.port";
 
-export interface ParseResponse {
-  parsedText: string;
-  events: ParseEvent[];
-}
-
-export class TemplateParserClient {
+export class HttpTemplateParserAdapter implements TemplateParserPort {
   private readonly baseUrl: string;
   private readonly fetchFn: typeof fetch;
 
@@ -23,7 +15,7 @@ export class TemplateParserClient {
   public async parse(
     template: string,
     variables: Record<string, string | null>,
-  ): Promise<ParseResponse> {
+  ): Promise<ParseResult> {
     try {
       const response = await this.fetchFn(`${this.baseUrl}/api/parse`, {
         method: "POST",
@@ -39,7 +31,7 @@ export class TemplateParserClient {
         throw new Error(data.error || "Unknown server error occurred.");
       }
 
-      return data as ParseResponse;
+      return data as ParseResult;
     } catch (error: unknown) {
       if (
         error instanceof Error &&

@@ -1,7 +1,7 @@
 import { test, expect, describe } from "vitest";
-import { TemplateParserClient } from "../infrastructure/api/template-parser-client";
+import { HttpTemplateParserAdapter } from "../infrastructure/adapters/http-template-parser.adapter";
 
-describe("The TemplateParserClient", () => {
+describe("The HttpTemplateParserAdapter", () => {
   test("sends a POST request to /api/parse with template and variables", async () => {
     let calledUrl = "";
     let calledOptions: RequestInit = {};
@@ -21,11 +21,11 @@ describe("The TemplateParserClient", () => {
       } as unknown as Response;
     };
 
-    const client = new TemplateParserClient(
+    const adapter = new HttpTemplateParserAdapter(
       "http://localhost:3001",
       fakeFetch as unknown as typeof fetch,
     );
-    const result = await client.parse("Hello, ${name}!", { name: "Ada" });
+    const result = await adapter.parse("Hello, ${name}!", { name: "Ada" });
 
     expect(calledUrl).toBe("http://localhost:3001/api/parse");
     expect(calledOptions.method).toBe("POST");
@@ -50,13 +50,13 @@ describe("The TemplateParserClient", () => {
       } as unknown as Response;
     };
 
-    const client = new TemplateParserClient(
+    const adapter = new HttpTemplateParserAdapter(
       "http://localhost:3001",
       fakeFetch as unknown as typeof fetch,
     );
 
     await expect(
-      client.parse("Hello, ${name}!", { name: null }),
+      adapter.parse("Hello, ${name}!", { name: null }),
     ).rejects.toThrow("Some server error message.");
   });
 
@@ -65,13 +65,13 @@ describe("The TemplateParserClient", () => {
       throw new Error("Network connection failure.");
     };
 
-    const client = new TemplateParserClient(
+    const adapter = new HttpTemplateParserAdapter(
       "http://localhost:3001",
       fakeFetch as unknown as typeof fetch,
     );
 
     await expect(
-      client.parse("Hello, ${name}!", { name: "Ada" }),
+      adapter.parse("Hello, ${name}!", { name: "Ada" }),
     ).rejects.toThrow("Failed to parse template: Network connection failure.");
   });
 });

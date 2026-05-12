@@ -1,11 +1,17 @@
 import { test, expect, describe } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useTemplateParser } from "../infrastructure/ui/App/useTemplateParser";
-import { TemplateParserClient } from "../infrastructure/api/template-parser-client";
+import { ParseTemplateUseCase } from "../application/use-cases/parse-template.use-case";
+import { TemplateParserPort } from "../domain/ports/template-parser.port";
 
 describe("The useTemplateParser hook", () => {
+  const dummyPort: TemplateParserPort = {
+    parse: async () => ({ parsedText: "", events: [] }),
+  };
+  const dummyUseCase = new ParseTemplateUseCase(dummyPort);
+
   test("initializes states with default values", () => {
-    const { result } = renderHook(() => useTemplateParser());
+    const { result } = renderHook(() => useTemplateParser(dummyUseCase));
 
     expect(result.current.template).toBe("Hello, ${name}!");
     expect(result.current.variableRows).toHaveLength(1);
@@ -18,7 +24,7 @@ describe("The useTemplateParser hook", () => {
   });
 
   test("updates template text", () => {
-    const { result } = renderHook(() => useTemplateParser());
+    const { result } = renderHook(() => useTemplateParser(dummyUseCase));
 
     act(() => {
       result.current.setTemplate("Welcome, ${user}!");
@@ -28,7 +34,7 @@ describe("The useTemplateParser hook", () => {
   });
 
   test("manages variable rows: add, update, delete", () => {
-    const { result } = renderHook(() => useTemplateParser());
+    const { result } = renderHook(() => useTemplateParser(dummyUseCase));
 
     // Add a new row
     act(() => {
@@ -56,8 +62,8 @@ describe("The useTemplateParser hook", () => {
     expect(result.current.variableRows).toHaveLength(1);
   });
 
-  test("parses template successfully calling the client", async () => {
-    const fakeClient = {
+  test("parses template successfully calling the usecase", async () => {
+    const fakePort: TemplateParserPort = {
       parse: async () => {
         return {
           parsedText: "Hello John!",
@@ -70,10 +76,9 @@ describe("The useTemplateParser hook", () => {
         };
       },
     };
+    const useCase = new ParseTemplateUseCase(fakePort);
 
-    const { result } = renderHook(() =>
-      useTemplateParser(fakeClient as unknown as TemplateParserClient),
-    );
+    const { result } = renderHook(() => useTemplateParser(useCase));
 
     // Initially output is empty
     expect(result.current.parsedText).toBe("");
@@ -91,16 +96,15 @@ describe("The useTemplateParser hook", () => {
     ]);
   });
 
-  test("handles error when parser client throws", async () => {
-    const fakeClient = {
+  test("handles error when parser port throws", async () => {
+    const fakePort: TemplateParserPort = {
       parse: async () => {
         throw new Error("Parser service unavailable.");
       },
     };
+    const useCase = new ParseTemplateUseCase(fakePort);
 
-    const { result } = renderHook(() =>
-      useTemplateParser(fakeClient as unknown as TemplateParserClient),
-    );
+    const { result } = renderHook(() => useTemplateParser(useCase));
 
     await act(async () => {
       await result.current.parseTemplate();
