@@ -34,4 +34,15 @@ describe("The TemplateEngine", () => {
       { type: "info", message: "No placeholders found in template" },
     ]);
   });
+
+  test("warns about unused keys when template has no placeholders", () => {
+    const result = TemplateEngine.parse("Hello, world!", { name: "Alice", age: "30" });
+
+    expect(result.text).toBe("Hello, world!");
+    expect(result.notifications).toEqual([
+      { type: "info", message: "No placeholders found in template" },
+      { type: "warning", message: "Unused variable: name" },
+      { type: "warning", message: "Unused variable: age" },
+    ]);
+  });
 });
