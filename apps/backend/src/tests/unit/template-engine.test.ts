@@ -45,4 +45,13 @@ describe("The TemplateEngine", () => {
       { type: "warning", message: "Unused variable: age" },
     ]);
   });
+
+  test("warns about unresolved placeholders when dictionary is empty", () => {
+    const result = TemplateEngine.parse("Hello, ${name}!", {});
+
+    expect(result.text).toBe("Hello, ${name}!");
+    expect(result.notifications).toEqual([
+      { type: "warning", message: "Unresolved placeholder: name" },
+    ]);
+  });
 });
