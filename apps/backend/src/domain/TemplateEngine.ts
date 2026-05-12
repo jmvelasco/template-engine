@@ -6,8 +6,14 @@ export class TemplateEngine {
     template: string,
     _variables: Record<string, string | null>,
   ): ParseResult {
+    if (template === "") {
+      return ParseResult.create(template, [
+        Notification.info("Template is empty, nothing to process"),
+      ]);
+    }
+
     return ParseResult.create(template, [
-      Notification.info("Template is empty, nothing to process"),
+      Notification.info("No placeholders found in template"),
     ]);
   }
 }
