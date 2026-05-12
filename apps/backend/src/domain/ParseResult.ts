@@ -6,7 +6,7 @@ export class ParseResult {
     readonly notifications: Notification[],
   ) {}
 
-  static create(_text: string, _notifications: Notification[]): ParseResult {
-    return undefined as unknown as ParseResult;
+  static create(text: string, notifications: Notification[]): ParseResult {
+    return new ParseResult(text, notifications);
   }
 }
