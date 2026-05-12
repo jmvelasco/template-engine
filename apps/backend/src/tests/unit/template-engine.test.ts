@@ -25,4 +25,13 @@ describe("The TemplateEngine", () => {
       { type: "info", message: "Template is empty, nothing to process" },
     ]);
   });
+
+  test("returns unchanged template with info when no placeholders and empty dictionary", () => {
+    const result = TemplateEngine.parse("Hello, world!", {});
+
+    expect(result.text).toBe("Hello, world!");
+    expect(result.notifications).toEqual([
+      { type: "info", message: "No placeholders found in template" },
+    ]);
+  });
 });
