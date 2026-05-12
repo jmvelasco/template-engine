@@ -1,0 +1,81 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary-color);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.notificationSuccess {
+  composes: notification;
+  background-color: rgba(76, 175, 80, 0.15);
+  color: var(--success-color);
+}
+
+.notificationWarning {
+  composes: notification;
+  background-color: rgba(255, 152, 0, 0.15);
+  color: var(--warning-color);
+}
+
+.notificationError {
+  composes: notification;
+  background-color: rgba(244, 67, 54, 0.15);
+  color: var(--error-color);
+}
+
+.notificationInfo {
+  composes: notification;
+  background-color: rgba(33, 150, 243, 0.15);
+  color: var(--info-color);
+}
+
+.dot {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dotSuccess {
+  composes: dot;
+  background-color: var(--success-color);
+}
+
+.dotWarning {
+  composes: dot;
+  background-color: var(--warning-color);
+}
+
+.dotError {
+  composes: dot;
+  background-color: var(--error-color);
+}
+
+.dotInfo {
+  composes: dot;
+  background-color: var(--info-color);
+}

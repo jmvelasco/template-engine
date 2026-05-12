@@ -1,0 +1,23 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 2rem;
+  background-color: var(--button-bg-color);
+  border: none;
+  border-radius: 0.5rem;
+  color: var(--button-text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.button:hover {
+  background-color: var(--button-bg-hover);
+}
+
+.buttonDisabled {
+  composes: button;
+  opacity: 0.6;
+  cursor: not-allowed;
+}

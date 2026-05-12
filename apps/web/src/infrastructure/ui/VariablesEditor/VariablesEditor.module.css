@@ -1,0 +1,75 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary-color);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.input {
+  padding: 0.5rem 0.75rem;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-color);
+  flex: 1;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--link-color);
+}
+
+.removeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  color: var(--error-color);
+  font-size: 1rem;
+  transition: opacity 0.2s ease;
+}
+
+.removeButton:hover {
+  opacity: 0.7;
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 1px dashed var(--border-color);
+  border-radius: 0.5rem;
+  color: var(--text-secondary-color);
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.addButton:hover {
+  border-color: var(--link-color);
+  color: var(--link-color);
+}
