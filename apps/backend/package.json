@@ -7,6 +7,7 @@
     "build": "tsc -b",
     "clean": "rm -rf lib coverage",
     "compile": "tsc --noEmit",
+    "start": "npx tsx src/index.ts",
     "test": "jest --verbose",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
