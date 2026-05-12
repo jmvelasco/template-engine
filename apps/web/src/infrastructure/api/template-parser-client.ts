@@ -40,7 +40,7 @@ export class TemplateParserClient {
       }
 
       return data as ParseResponse;
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (
         error instanceof Error &&
         !error.message.startsWith("Failed to parse template:")

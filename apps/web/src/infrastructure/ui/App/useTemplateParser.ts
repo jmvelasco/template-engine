@@ -60,8 +60,10 @@ export function useTemplateParser(
       const response = await client.parse(template, variables);
       setParsedText(response.parsedText);
       setEvents(response.events);
-    } catch (err: any) {
-      setError(err.message || "Failed to parse template.");
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Failed to parse template.";
+      setError(message);
       setParsedText("");
       setEvents([]);
     } finally {
