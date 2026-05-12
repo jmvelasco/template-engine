@@ -3,7 +3,7 @@
 - [x] 1.1 Refactor current domain `render` function to `parse` in `apps/backend/src/domain/template-engine.ts`. Implement a fully pure, side-effect free algorithm (no parameter mutations) and completely remove the legacy console `logger` and its tests. 🧪 Notice: Applying TDD Refactor Phase & Coding Standards (No mutations, One concept, one name).
 - [x] 1.2 Implement the domain models and ports: create `ParseEvent` type and `ParseNotifier` interface in `apps/backend/src/domain/ports/parse-notifier.ts`. 🏛️ Notice: Applying Hexagonal Architecture Domain Layer guidelines.
 - [x] 1.3 Refactor the domain `parse` function to accept a `ParseNotifier` and emit events, adapting existing tests. 🧪 Notice: Applying TDD Red-Green-Refactor with TPP transformations.
-- [ ] 1.4 Run `npx tsc --noEmit` on the backend workspace to catch broken imports or type errors. 🧹 Notice: Quality Validation step.
+- [x] 1.4 Run `npx tsc --noEmit` on the backend workspace to catch broken imports or type errors. 🧹 Notice: Quality Validation step.
 
 ## 2. Application Layer and Adapters
 
