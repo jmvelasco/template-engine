@@ -158,5 +158,27 @@ describe("The parse function", () => {
         },
       ]);
     });
+
+    // TODO:
+    // [ ] 1. Template has a single undefined placeholder
+    // [ ] 2. Template has multiple different undefined placeholders
+    // [ ] 3. Template has duplicate undefined placeholders
+    // [ ] 4. Template has mixture of defined and undefined placeholders
+
+    test("should notify a warning event when a placeholder is not defined in the dictionary", () => {
+      const notifier = new SpyParseNotifier();
+      const template = "Hello, ${name}!";
+      const variables = {};
+
+      const result = parse(template, variables, notifier);
+
+      expect(result).toBe("Hello, ${name}!");
+      expect(notifier.events).toEqual([
+        {
+          type: "WARNING",
+          message: "No replacements done! placeholder ${name} is not defined in the dictionary.",
+        },
+      ]);
+    });
   });
 });
