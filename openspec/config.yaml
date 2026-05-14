@@ -1,0 +1,40 @@
+schema: spec-driven
+
+context: |
+    Tech stack: TypeScript, React, Node.js
+    Architecture: hexagonal architecture
+    Monorepo with npm workspaces: backend, web
+    Layers: domain -> application -> infrastructure
+    Web: React 19, TypeScript 5, Vite 7
+    Testing: Jest (backend), Vitest (web)
+    Project guidelines (source of truth): All artifact creation and implementation must read and follow the guidelines described in ./AGENTS and ./.agents/rules
+    - ./AGENTS.md - Core practices for all artifacts
+    - ./.agents/rules/coding-standards.md - Naming, function design, and code style conventions
+    - ./.agents/rules/tdd.md - TDD 5-step cycle with Transformation Priority Premise
+    - ./.agents/rules/commit-strategy.md - Commit message format and strategy
+    - ./.agents/rules/testing-standards.md - Testing strategy, patterns, and conventions
+    - ./.agents/rules/xp-methodology.md - XP methodology and Transformation Priority Premise
+    - ./.agents/rules/react-optimization.md - React performance optimization patterns
+    - ./.agents/skills/backend-hexagonal - Architectural patterns for backend development (apps/backend/src)
+    - ./.agents/skills/frontend-patterns - Architectural and design patterns for frontend development (apps/web/src)
+    - ./.agents/skills/react-best-practices - Best practices for frontend development (apps/web/src)
+    - ./.agents/skills/vercel-composition-patterns - Composition patterns for frontend development (apps/web/src)
+
+rules:
+  proposal:
+    - Keep proposal concise, focused on the "why"
+    - Always include a "Non-goals" section
+  specs:
+    - Write scenarios in Given/When/Then format
+    - Include acceptance criteria for each scenario
+    - Include edge cases and error scenarios
+  design:
+    - Follow hexagonal architecture layers as described in the project context
+    - Use TDD for all implementation tasks
+  tasks:
+    - "Notice the user which skill, rule, or instruction is being applied in each task. Add an emoji to make it more visual and easy to understand."
+    - "Tasks with behavior use TDD: REASON -> RED -> GREEN -> REFACTOR -> RE-EVALUATE"
+    - "Order inside-out: domain -> application -> infrastructure"
+    - "Run `npm run format:fix` on all code changes"
+    - "Run `npm run validate` after finish each task to check compilation, linting, and tests"
+    - "Before marking a task group as done, run `npx tsc --noEmit` in the affected workspace to catch broken imports and type errors."
