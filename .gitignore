@@ -4,3 +4,4 @@ coverage/
 .agents/
 .github/
 AGENTS.md
+lib
